@@ -1,0 +1,107 @@
+.figure {
+  margin: 4px 0 0;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sun {
+  fill: color-mix(in srgb, var(--signal) 12%, transparent);
+}
+
+.actual,
+.forecast {
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.actual {
+  stroke: var(--text);
+}
+
+.forecast {
+  stroke: var(--signal);
+  stroke-dasharray: 4 3;
+}
+
+.caption {
+  display: grid;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.days button,
+.layers button {
+  font: inherit;
+  font-size: 12.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.days button[aria-pressed="true"],
+.layers button[aria-pressed="true"] {
+  border-color: var(--activation);
+  color: var(--text);
+}
+
+.kActual,
+.kForecast {
+  display: inline-block;
+  width: 12px;
+  height: 2px;
+  margin: 0 4px 3px 0;
+  vertical-align: middle;
+  background: var(--text);
+}
+
+.kForecast {
+  margin-left: 8px;
+  background: var(--signal);
+}
+
+.layers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.layers li + li::before {
+  content: "→";
+  margin-right: 6px;
+  color: var(--text-faint);
+}
+
+.layers button {
+  font-size: 13.5px;
+  padding: 6px 12px;
+}
+
+.silent {
+  margin: 0;
+  font-size: 14.5px;
+  min-height: 44px;
+}

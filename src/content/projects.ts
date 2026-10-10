@@ -55,6 +55,7 @@ export const featured: Project[] = [
       { label: "Held-out F0.5", value: "0.9855 (US/India)" },
     ],
     repo: gh("amazon-ml-challenge-2026-entity-resolution"),
+    demo: { label: "Match records yourself", href: "/projects/amazon-ml-challenge" },
     team: "Team project",
   },
   {
@@ -70,6 +71,7 @@ export const featured: Project[] = [
     ],
     facts: [{ label: "Time to first word", value: "~1.5 s on CPU" }],
     repo: gh("voice_ai"),
+    demo: { label: "Talk to it in your browser", href: "/projects/voice-assistant" },
   },
   {
     slug: "gene-anomaly",

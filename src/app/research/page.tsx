@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
+import { AbstentionFigure, DemandFigure } from "@/components/PaperFigures";
+import solar from "../../../public/projects/solar/explorer.json";
 import { papers, patents, patentSearch } from "@/content/research";
 import styles from "../content.module.css";
 
 const published = patents.filter((p) => p.status === "Published");
 const filed = patents.filter((p) => p.status === "Filed");
 const presented = papers.filter((p) => p.status === "Presented");
+
+// Three 2024 days from the public-data rerun: winter, summer, autumn.
+const pickDays = [0, Math.floor(solar.days.dates.length / 2), solar.days.dates.length - 1].map((i) => ({
+  date: solar.days.dates[i],
+  actual: solar.days.actual[i],
+  forecast: solar.days.pred.lgbm_solar[i],
+  sun: solar.days.sun[i],
+}));
 
 export const metadata: Metadata = {
   title: "Research",
@@ -53,6 +63,7 @@ export default function Page() {
                     <p key={s}>{s}</p>
                   ))}
                 </div>
+                {p.venueShort === "SIPCOV-2026" ? <DemandFigure days={pickDays} /> : <AbstentionFigure />}
                 {p.facts ? (
                   <dl className={styles.facts}>
                     {p.facts.map((f) => (
@@ -96,6 +107,11 @@ export default function Page() {
                 <p className={styles.meta}>
                   <span>Application No. {p.number}</span>
                 </p>
+                {p.explain ? (
+                  <p className={styles.links}>
+                    <Link href={p.explain}>See how it works</Link>
+                  </p>
+                ) : null}
               </article>
             ))}
           </div>

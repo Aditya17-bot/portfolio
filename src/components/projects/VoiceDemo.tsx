@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { FILLER_AFTER_MS, FILLERS, hasWebGPU, MODELS, splitSentences, SYSTEM_PROMPT, transformers, Vad } from "@/lib/voice";
+import { CANNED, FILLER_AFTER_MS, FILLERS, gpuUsable, hasWebGPU, MODELS, splitSentences, SYSTEM_PROMPT, transformers, Vad } from "@/lib/voice";
 import styles from "./VoiceDemo.module.css";
 
 type Size = "small" | "large";
@@ -96,8 +96,8 @@ export function VoiceDemo() {
     setError("");
     try {
       const tf = await transformers();
-      const gpu = hasWebGPU();
-      const dev = gpu ? "webgpu" : "wasm";
+      const usable = await gpuUsable();
+      const dev = usable ? "webgpu" : "wasm";
       setDevice(dev);
       const onProgress = (p: any) => {
         if (p.status === "progress" && p.file?.endsWith(".onnx"))
@@ -110,7 +110,7 @@ export function VoiceDemo() {
       });
       let llm;
       try {
-        llm = await tf.pipeline("text-generation", MODELS[size].id, { dtype: gpu ? "q4f16" : "q8", device: dev, progress_callback: onProgress });
+        llm = await tf.pipeline("text-generation", MODELS[size].id, { dtype: usable ? "q4f16" : "q8", device: dev, progress_callback: onProgress });
       } catch {
         // Some GPUs lack fp16 support: fall back to the CPU build.
         setDevice("wasm");
@@ -190,6 +190,12 @@ export function VoiceDemo() {
     const messages = [{ role: "system", content: SYSTEM_PROMPT }, ...history.current.slice(-10), { role: "user", content: question }];
     try {
       await m.llm(messages, { max_new_tokens: 96, do_sample: false, streamer, stopping_criteria: stopper.current });
+    } catch {
+      // fallback.py: a canned conversational line instead of a raw error.
+      const canned = CANNED[Math.floor(Math.random() * CANNED.length)];
+      full = canned;
+      buffer = canned;
+      setTurns((ts) => ts.map((x, i) => (i === ts.length - 1 ? { ...x, text: canned } : x)));
     } finally {
       clearTimeout(filler);
     }

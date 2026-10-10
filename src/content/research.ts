@@ -18,6 +18,8 @@ export type Patent = {
   office: string;
   status: "Published" | "Filed";
   year: string;
+  /** An interactive explanation on this site. */
+  explain?: string;
 };
 
 export const papers: Paper[] = [
@@ -67,6 +69,7 @@ export const patents: Patent[] = [
     office: "Indian Patent Office",
     status: "Published",
     year: "2026",
+    explain: "/research/patents/wearable-navigation",
   },
   {
     number: "202641115711",
@@ -75,6 +78,7 @@ export const patents: Patent[] = [
     office: "Indian Patent Office",
     status: "Published",
     year: "2026",
+    explain: "/research/patents/sensor-fusion",
   },
   ...[
     "Detecting coordinated malpractice in examination halls",

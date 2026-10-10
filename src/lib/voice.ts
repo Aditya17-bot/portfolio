@@ -15,6 +15,12 @@ export const FILLERS = [
 ];
 export const FILLER_AFTER_MS = 1200;
 
+export const CANNED = [
+  "You know, I lost my train of thought there. Could you say that again?",
+  "Sorry, my mind wandered for a moment. Ask me once more?",
+  "I didn't quite gather my thoughts on that one. Mind repeating it?",
+];
+
 const SENTENCE_END = /(.+?[.!?])(?:\s+|$)(?=\S|$)/g;
 const ABBREVIATION = /\b(?:Mr|Mrs|Ms|Dr|Prof|Sr|Jr|St|vs|etc|approx|e\.g|i\.e|U\.S|U\.K)\.$/i;
 
@@ -54,6 +60,17 @@ export function transformers(): Promise<any> {
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const hasWebGPU = () => typeof navigator !== "undefined" && "gpu" in navigator;
+
+/** WebGPU exposed is not WebGPU usable: blocklisted or headless GPUs have no adapter. */
+export async function gpuUsable() {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const adapter = await (navigator as any).gpu?.requestAdapter();
+    return !!adapter;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Energy-based voice activity detection with the app's state machine: speech starts when the level rises well
