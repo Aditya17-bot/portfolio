@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { searchIndex } from "@/content/search";
 import { nav, site } from "@/content/site";
+import { CommandPalette } from "./CommandPalette";
 import { NavLinks } from "./NavLinks";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./SiteHeader.module.css";
@@ -20,6 +22,7 @@ export function SiteHeader() {
           {site.name}
         </Link>
         <NavLinks items={nav} />
+        <CommandPalette items={searchIndex()} />
         <ThemeToggle />
       </div>
     </header>
