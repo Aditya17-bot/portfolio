@@ -69,7 +69,7 @@ export const pullRequests: PullRequest[] = [
     stars: "11k",
     number: 5669,
     title: "Filter integer images in float32",
-    state: "open",
+    state: "merged",
     date: "Oct 2026",
     bug: "Integer images cast kernels and sigma to their own dtype: a uint8 Gaussian blur returned all zeros, box sums wrapped mod 256, and bilateral differences wrapped (10 − 250 = 16).",
     fix: "Following the maintainers' convention, integer and bool inputs are promoted to float32 before any kernel is cast, across nine filtering functions.",
