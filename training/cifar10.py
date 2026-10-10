@@ -94,7 +94,7 @@ def to_device(dev):
 
 
 def fit(net, data, cfg, log_path: Path, probe=None):
-    """SGD + Nesterov with a one-cycle schedule, bf16 autocast. Writes one CSV row per epoch.
+    """SGD + Nesterov (or AdamW) with a one-cycle schedule, bf16 autocast. Writes one CSV row per epoch.
 
     probe(net, epoch, step) is called after each backward pass, before the optimiser step, so it can
     read gradients. Returns the list of rows.
@@ -102,7 +102,10 @@ def fit(net, data, cfg, log_path: Path, probe=None):
     xtr, ytr, xte, yte = data
     dev = xtr.device
     gen = torch.Generator(device=dev).manual_seed(cfg["seed"])
-    opt = torch.optim.SGD(net.parameters(), lr=cfg["max_lr"], momentum=0.9, weight_decay=cfg["weight_decay"], nesterov=True)
+    if cfg.get("optimizer") == "adamw":
+        opt = torch.optim.AdamW(net.parameters(), lr=cfg["max_lr"], weight_decay=cfg["weight_decay"])
+    else:
+        opt = torch.optim.SGD(net.parameters(), lr=cfg["max_lr"], momentum=0.9, weight_decay=cfg["weight_decay"], nesterov=True)
     steps = int(np.ceil(len(xtr) / cfg["batch_size"]))
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=cfg["max_lr"], epochs=cfg["epochs"], steps_per_epoch=steps, pct_start=0.15)
     rows = []
