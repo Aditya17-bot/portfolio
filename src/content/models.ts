@@ -57,7 +57,15 @@ export const models: ModelEntry[] = [
     status: "live",
     date: "Oct 2026",
   },
-  { slug: "dcgan", title: "DCGAN", family: "Generative", dataset: "MNIST", summary: "Two networks trained against each other.", status: "planned" },
+  {
+    slug: "dcgan-mnist",
+    title: "DCGAN",
+    family: "Generative",
+    dataset: "MNIST",
+    summary: "A generator and a discriminator trained against each other. New digits on every click, judged by the CNN above.",
+    status: "live",
+    date: "Oct 2026",
+  },
   { slug: "lstm-load", title: "LSTM forecaster", family: "Recurrent", dataset: "Delhi load", summary: "A sequence model for electricity demand, the problem from my forecasting paper.", status: "planned" },
   {
     slug: "mini-gpt",
@@ -68,7 +76,15 @@ export const models: ModelEntry[] = [
     status: "live",
     date: "Oct 2026",
   },
-  { slug: "vit-tiny", title: "ViT-Tiny", family: "Vision transformer", dataset: "CIFAR-10", summary: "Attention instead of convolution, next to the ResNet.", status: "planned" },
+  {
+    slug: "vit-cifar10",
+    title: "ViT-Tiny",
+    family: "Vision transformer",
+    dataset: "CIFAR-10",
+    summary: "Attention instead of convolution, trained from scratch on the same data as the ResNets, and where it falls short.",
+    status: "live",
+    date: "Oct 2026",
+  },
 ];
 
 export const modelBySlug = (slug: string) => models.find((m) => m.slug === slug);

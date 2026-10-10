@@ -1,0 +1,42 @@
+{
+ "name": "DCGAN",
+ "params": 546177,
+ "config": {
+  "epochs": 30,
+  "batch_size": 128,
+  "lr": 0.0002,
+  "betas": [
+   0.5,
+   0.999
+  ],
+  "z": 64,
+  "seed": 0,
+  "eval_samples": 10000
+ },
+ "results": {
+  "class_counts": [
+   1214,
+   831,
+   750,
+   991,
+   858,
+   896,
+   963,
+   1262,
+   946,
+   1289
+  ],
+  "class_entropy_bits": 3.299,
+  "mean_confidence_generated": 0.8621,
+  "mean_confidence_real": 0.9903,
+  "frechet_cnn_generated": 0.0036,
+  "frechet_cnn_real_halves": 0.0017,
+  "train_seconds": 175.5,
+  "onnx_max_abs_diff": 1.6093254089355469e-06
+ },
+ "source": "training/dcgan_mnist/log.csv",
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "94eae73",
+ "command": "python training/dcgan_mnist/train.py",
+ "onnx_bytes": 2237647
+}

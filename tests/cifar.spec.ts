@@ -86,3 +86,17 @@ test.describe("ResNet page", () => {
     }
   });
 });
+
+test.describe("ViT page", () => {
+  test.skip(!existsSync("public/models/vit-cifar10/meta.json"), "ViT not trained yet");
+
+  test("ViT-Tiny classifies the same test images in the browser and draws attention rollout", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto("/models/vit-cifar10");
+    expect(await scoreSamples(page, "vit-playground")).toBeGreaterThanOrEqual(7);
+    expect(await heatSum(page, "vit-playground")).toBeGreaterThan(0);
+    await expect(page.getByTestId("vit-playground")).toContainText("Attention rollout");
+    expect(errors).toEqual([]);
+  });
+});

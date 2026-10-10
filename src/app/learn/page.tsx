@@ -42,10 +42,22 @@ const lessons = [
     question: "What does a model need so that every point between two digits decodes to something sensible?",
   },
   {
+    slug: "dcgan-mnist",
+    anchor: "how",
+    idea: "Two networks in competition",
+    question: "How can a model learn to draw digits without ever being told what a good drawing is?",
+  },
+  {
     slug: "mini-gpt",
     anchor: "how",
     idea: "Attention",
     question: "How does a transformer decide which earlier characters matter for the next one?",
+  },
+  {
+    slug: "vit-cifar10",
+    anchor: "compare",
+    idea: "Attention instead of convolution",
+    question: "What happens when an image model has to learn, from 50,000 photos, what a convolution assumes for free?",
   },
 ];
 

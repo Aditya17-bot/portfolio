@@ -65,6 +65,7 @@ export function CifarPlayground({
   sampleLabels,
   classes,
   camSize,
+  mapTitle,
   testId = "cifar-playground",
 }: {
   model: string;
@@ -72,6 +73,8 @@ export function CifarPlayground({
   sampleLabels: number[];
   classes: string[];
   camSize: number;
+  /** Caption for the heatmap when it is not class-specific, e.g. attention rollout. */
+  mapTitle?: string;
   testId?: string;
 }) {
   const [ready, setReady] = useState(false);
@@ -218,7 +221,7 @@ export function CifarPlayground({
           <figcaption className={styles.caption}>
             <label className={styles.toggle}>
               <input type="checkbox" checked={showCam} onChange={(e) => setShowCam(e.target.checked)} />
-              Where it looked{out ? `, for “${classes[top]}”` : ""}
+              {mapTitle ?? `Where it looked${out ? `, for “${classes[top]}”` : ""}`}
             </label>
             {input?.label != null ? (
               <span data-testid="cifar-truth">

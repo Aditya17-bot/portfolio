@@ -1,0 +1,42 @@
+{
+ "name": "ViT-Tiny",
+ "params": 1806538,
+ "classes": [
+  "airplane",
+  "automobile",
+  "bird",
+  "cat",
+  "deer",
+  "dog",
+  "frog",
+  "horse",
+  "ship",
+  "truck"
+ ],
+ "config": {
+  "epochs": 50,
+  "batch_size": 128,
+  "optimizer": "adamw",
+  "max_lr": 0.001,
+  "weight_decay": 0.05,
+  "seed": 0,
+  "patch": 4,
+  "width": 192,
+  "depth": 6,
+  "heads": 3,
+  "mlp": 384
+ },
+ "results": {
+  "test_acc": 0.8268,
+  "test_loss": 0.74698,
+  "train_acc": 0.98594,
+  "train_loss": 0.04403,
+  "onnx_test_acc": 0.8271,
+  "train_seconds": 723.8
+ },
+ "source": "training/vit_cifar10/log.csv",
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "267a304",
+ "command": "python training/vit_cifar10/train.py",
+ "onnx_bytes": 7302364
+}
