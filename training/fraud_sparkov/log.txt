@@ -1,0 +1,10 @@
+rows 1,852,394, fraud 9,651 (0.521%)
+fit: 1,070,966 rows, 6,250 fraud, 2019-01-01 to 2020-03-20
+validation: 225,709 rows, 1,256 fraud, 2020-03-21 to 2020-06-21
+test: 555,719 rows, 2,145 fraud, 2020-06-21 to 2020-12-31
+features in 9 s
+random forest 152 s, isolation forest 5 s
+random_forest: PR-AUC 0.9541  ROC-AUC 0.9957  val-F1 threshold 0.4191 -> test precision 0.933 recall 0.881 F1 0.906 (TP 1889 FP 136 FN 256)
+isolation_forest: PR-AUC 0.0753  ROC-AUC 0.9008  val-F1 threshold 0.5710 -> test precision 0.120 recall 0.263 F1 0.165 (TP 565 FP 4128 FN 1580)
+importance: log_amt 0.318, log_spend_24h 0.259, amt_vs_card_mean 0.182, hour 0.098, category 0.054, log_since_last 0.035, count_24h 0.023, age 0.014, log_city_pop 0.008, distance_km 0.006, weekday 0.003, gender 0.002
+wrote C:\adi\portfolio\site\public\projects\fraud\curves.json (17 KB), total 189 s

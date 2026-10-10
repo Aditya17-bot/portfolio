@@ -121,6 +121,9 @@ export default function Page() {
             <a href={site.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
             </a>
+            <a href="/Aditya_Sridhar_Resume.pdf" data-testid="resume">
+              Resume (PDF)
+            </a>
           </p>
         </section>
       </div>

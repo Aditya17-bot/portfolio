@@ -114,6 +114,7 @@ export const more: Project[] = [
     stack: ["scikit-learn", "Jupyter"],
     points: [],
     repo: gh("Fraud_detection"),
+    demo: { label: "Try the alert budget", href: "/projects/fraud" },
   },
   {
     slug: "finance-ai",

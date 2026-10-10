@@ -43,6 +43,9 @@ test("about has contact links", async ({ page }) => {
   await expect(contact.locator('a[href^="mailto:"]')).toHaveCount(1);
   await expect(contact.locator('a[href*="github.com"]')).toHaveCount(1);
   await expect(contact.locator('a[href*="linkedin.com"]')).toHaveCount(1);
+  const resume = await page.request.get((await contact.getByTestId("resume").getAttribute("href"))!);
+  expect(resume.ok()).toBe(true);
+  expect(resume.headers()["content-type"]).toContain("pdf");
 });
 
 test("learn links each idea to a live model page section", async ({ page }) => {
@@ -54,4 +57,14 @@ test("learn links each idea to a live model page section", async ({ page }) => {
   await first.click();
   await expect(page).toHaveURL(/\/models\/mlp-numpy#how$/);
   await expect(page.locator("#how")).toBeInViewport();
+});
+
+test("share image, sitemap and robots are served", async ({ page, request }) => {
+  await page.goto("/");
+  const og = await page.locator('meta[property="og:image"]').getAttribute("content");
+  const img = await request.get(new URL(og!).pathname);
+  expect(img.headers()["content-type"]).toBe("image/png");
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  for (const path of ["/projects/fraud", "/models/lstm-load", "/about"]) expect(sitemap).toContain(path);
+  expect(await (await request.get("/robots.txt")).text()).toContain("sitemap.xml");
 });

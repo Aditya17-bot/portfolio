@@ -8,20 +8,26 @@ export function ModelHeader({
   title,
   lede,
   stats,
+  crumb = { href: "/models", label: "Models" },
+  kind = "Model",
+  badge = "runs in your browser",
 }: {
   family: string;
   date: string;
   title: string;
   lede: ReactNode;
   stats: { label: string; value: string }[];
+  crumb?: { href: string; label: string };
+  kind?: string;
+  badge?: string;
 }) {
   return (
     <header className={styles.header}>
       <nav className={styles.crumbs} aria-label="Breadcrumb">
-        <Link href="/models">Models</Link> <span aria-hidden="true">/</span> {family}
+        <Link href={crumb.href}>{crumb.label}</Link> <span aria-hidden="true">/</span> {family}
       </nav>
       <p className="eyebrow">
-        Model · {date} · <span className={styles.live}>runs in your browser</span>
+        {kind} · {date} · <span className={styles.live}>{badge}</span>
       </p>
       <h1 className={styles.title}>{title}</h1>
       <div className={styles.lede}>{lede}</div>

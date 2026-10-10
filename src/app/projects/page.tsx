@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
 import { featured, more, type Project } from "@/content/projects";
 import styles from "../content.module.css";
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
 function Links({ p }: { p: Project }) {
   return (
     <p className={styles.links}>
-      {p.demo ? (
+      {p.demo?.href.startsWith("/") ? (
+        <Link href={p.demo.href}>{p.demo.label}</Link>
+      ) : p.demo ? (
         <a href={p.demo.href} target="_blank" rel="noreferrer">
           {p.demo.label}
         </a>
