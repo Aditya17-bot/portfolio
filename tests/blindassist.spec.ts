@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("BlindAssist demo", () => {
+  // 24 MB of detectors plus the runtime on first load; slow links need the room.
+  test.setTimeout(180_000);
+
   test("detects on the example photo, speaks a sentence and steps through the pipeline", async ({ page }) => {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/projects/blindassist");
     const root = page.getByTestId("blindassist-demo");
-    await expect(root).toHaveAttribute("data-ready", "true", { timeout: 60_000 });
+    await expect(root).toHaveAttribute("data-ready", "true", { timeout: 150_000 });
     // The wardrobe photo: walk mode must produce a warning sentence, not silence.
     const say = root.getByTestId("ba-say");
     await expect(say).not.toHaveText("…");
@@ -31,7 +34,7 @@ test.describe("BlindAssist demo", () => {
   test("another example photo gives another analysis", async ({ page }) => {
     await page.goto("/projects/blindassist");
     const root = page.getByTestId("blindassist-demo");
-    await expect(root).toHaveAttribute("data-ready", "true", { timeout: 60_000 });
+    await expect(root).toHaveAttribute("data-ready", "true", { timeout: 150_000 });
     const first = await root.getByTestId("ba-say").textContent();
     await root.getByTestId("ba-example").nth(2).click();
     await expect.poll(() => root.getByTestId("ba-say").textContent(), { timeout: 30_000 }).not.toBe(first);
