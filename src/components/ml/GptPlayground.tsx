@@ -12,16 +12,33 @@ async function int64(ids: number[]): Promise<Tensor> {
   return new m.Tensor("int64", BigInt64Array.from(ids.map(BigInt)), [1, ids.length]);
 }
 
-function sample(logits: Float32Array, offset: number, vocab: number, temperature: number) {
+/** Softmax of one position's logits at a temperature. */
+function probs(logits: Float32Array, offset: number, vocab: number, temperature: number) {
   let max = -Infinity;
   for (let i = 0; i < vocab; i++) max = Math.max(max, logits[offset + i]);
   const p = new Float64Array(vocab);
   let sum = 0;
   for (let i = 0; i < vocab; i++) sum += p[i] = Math.exp((logits[offset + i] - max) / temperature);
-  let r = Math.random() * sum;
-  for (let i = 0; i < vocab; i++) if ((r -= p[i]) <= 0) return i;
-  return vocab - 1;
+  for (let i = 0; i < vocab; i++) p[i] /= sum;
+  return p;
 }
+
+function sample(p: Float64Array) {
+  let r = Math.random();
+  for (let i = 0; i < p.length; i++) if ((r -= p[i]) <= 0) return i;
+  return p.length - 1;
+}
+
+type Guess = { char: string; p: number }[];
+
+function top(p: Float64Array, vocab: string, k = 5): Guess {
+  return [...p]
+    .map((v, i) => ({ char: vocab[i], p: v }))
+    .sort((a, b) => b.p - a.p)
+    .slice(0, k);
+}
+
+const show = (c: string) => (c === "\n" ? "↵" : c === " " ? "␣" : c);
 
 const clock = () => performance.now();
 
@@ -55,6 +72,7 @@ export function GptPlayground({
   const [focus, setFocus] = useState<Focus | null>(null);
   const [layer, setLayer] = useState(layers - 1);
   const [head, setHead] = useState<number | "mean">("mean");
+  const [guess, setGuess] = useState<{ chosen: string; options: Guess } | null>(null);
   const stop = useRef(false);
 
   useEffect(() => {
@@ -81,7 +99,9 @@ export function GptPlayground({
         const window = ids.slice(-context);
         const res = await runSerial(session, { idx: await int64(window) }, ["logits"]);
         const logits = res.logits.data as Float32Array;
-        const next = sample(logits, (window.length - 1) * vocab.length, vocab.length, temperature);
+        const p = probs(logits, (window.length - 1) * vocab.length, vocab.length, temperature);
+        const next = sample(p);
+        setGuess({ chosen: vocab[next], options: top(p, vocab) });
         ids.push(next);
         out += vocab[next];
         setText(out);
@@ -99,8 +119,10 @@ export function GptPlayground({
     const start = Math.max(0, q + 1 - context);
     const ids = [...text.slice(start, q + 1)].map((c) => stoi.get(c)!);
     const session = await loadSession(MODEL);
-    const res = await runSerial(session, { idx: await int64(ids) }, ["attn"]);
+    const res = await runSerial(session, { idx: await int64(ids) }, ["attn", "logits"]);
     setFocus({ pos, start, weights: res.attn.data as Float32Array, t: ids.length });
+    const p = probs(res.logits.data as Float32Array, (ids.length - 1) * vocab.length, vocab.length, temperature);
+    setGuess({ chosen: text[pos], options: top(p, vocab) });
   }
 
   function weightAt(i: number) {
@@ -173,6 +195,26 @@ export function GptPlayground({
               : "Runs in your browser. Nothing is uploaded."}
         </p>
       </div>
+
+      {guess ? (
+        <div className={styles.guess} data-testid="gpt-guess">
+          <p className={styles.note}>
+            {focus ? "When it wrote the selected character" : running ? "Right now" : "For the last character"}, the model&apos;s
+            top five guesses at temperature {temperature.toFixed(1)}; it then samples one.
+          </p>
+          <ol>
+            {guess.options.map((o) => (
+              <li key={o.char} data-chosen={o.char === guess.chosen || undefined}>
+                <code>{show(o.char)}</code>
+                <span className={styles.bar}>
+                  <span style={{ width: `${(o.p * 100).toFixed(1)}%` }} />
+                </span>
+                <span className={styles.pct} data-testid="gpt-guess-pct">{(o.p * 100).toFixed(1)}%</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
 
       {focus ? (
         <div className={styles.attn} data-testid="gpt-attention">

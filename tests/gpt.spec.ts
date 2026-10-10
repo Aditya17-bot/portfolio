@@ -18,12 +18,21 @@ test.describe("Mini-GPT page", () => {
     expect(text.length).toBe(meta.sample.prompt.length + 300);
     for (const c of text) expect(meta.vocab).toContain(c);
 
-    await root.getByTestId("gpt-output").locator("span").nth(meta.sample.prompt.length + 20).click();
+    // A generated letter (newline spans have no box to click); the prompt has fewer than 15 letters.
+    await root.getByTestId("gpt-output").locator("span").filter({ hasText: /^[a-z]$/i }).nth(15).click();
     const attn = root.getByTestId("gpt-attention");
     await expect(attn).toBeVisible();
     // Some earlier characters get highlighted.
     await expect(root.getByTestId("gpt-output").locator("span[style*='background']").first()).toBeVisible();
     await attn.getByRole("button", { name: "1", exact: true }).first().click();
+
+    // The model's own guesses for that character: five options, probabilities that fit in 100%,
+    // and the character it actually wrote marked when it is among them.
+    const guess = root.getByTestId("gpt-guess");
+    await expect(guess.locator("li")).toHaveCount(5);
+    const pcts = (await guess.getByTestId("gpt-guess-pct").allTextContents()).map((t) => Number(t.replace("%", "")));
+    expect(pcts.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(100.5);
+    expect([...pcts].sort((a, b) => b - a)).toEqual(pcts);
     expect(errors).toEqual([]);
   });
 

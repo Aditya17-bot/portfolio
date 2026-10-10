@@ -37,8 +37,18 @@ export function TrainingChart({
   if (Math.min(...values) >= 0) lo = Math.max(lo, 0);
   const x = (e: number) => pad.l + ((e - xs[0]) / (xs[xs.length - 1] - xs[0] || 1)) * (W - pad.l - pad.r);
   const y = (v: number) => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
-  const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => lo + f * (hi - lo));
-  const xTicks = [...new Set([xs[0], ...xs.filter((e) => e % 5 === 0), xs[xs.length - 1]])];
+  // Round tick values (1, 2, 2.5 or 5 times a power of ten), about four of them.
+  const raw = (hi - lo) / 4;
+  const mag = 10 ** Math.floor(Math.log10(raw));
+  const unit = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw) ?? raw;
+  const ticks: number[] = [];
+  for (let v = Math.ceil(lo / unit - 1e-9) * unit; v <= hi + 1e-9; v += unit) ticks.push(Number(v.toPrecision(12)));
+  // At most about seven x labels, always including the first and last.
+  const every = Math.ceil(xs.length / 7);
+  const xTicks = [...new Set(xs.filter((_, i) => i % every === 0 || i === xs.length - 1))];
+  // Drop the label before the last one when the two would collide.
+  const n = xTicks.length;
+  if (n > 2 && xTicks[n - 1] - xTicks[n - 2] < (xTicks[1] - xTicks[0]) / 2) xTicks.splice(n - 2, 1);
 
   return (
     <figure className={styles.figure}>
