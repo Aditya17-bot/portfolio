@@ -175,7 +175,12 @@ def main():
     true_te = feats[te_o[:, None] + np.arange(h), 0]
     rows = []
     t0 = time.time()
-    for epoch in range(1, cfg["epochs"] + 1):
+    if "--export-only" in sys.argv:
+        # Re-export a finished run from its checkpoint and log, without training again.
+        net.load_state_dict(torch.load(HERE / "model.pt", map_location=dev))
+        with open(HERE / "log.csv") as f:
+            rows = [{k: float(v) for k, v in r.items()} for r in csv.DictReader(f)]
+    for epoch in range(1, (0 if rows else cfg["epochs"]) + 1):
         order = rng.permutation(tr_o)
         tot = 0.0
         for i in range(0, len(order), cfg["batch_size"]):
@@ -198,10 +203,11 @@ def main():
         rows.append(row)
         print(row, flush=True)
 
-    with open(HERE / "log.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0]))
-        w.writeheader()
-        w.writerows(rows)
+    if "--export-only" not in sys.argv:
+        with open(HERE / "log.csv", "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0]))
+            w.writeheader()
+            w.writerows(rows)
 
     # Baselines on exactly the same origins and horizons.
     persistence = np.repeat(feats[te_o - 1, 0][:, None], h, axis=1)
@@ -222,8 +228,10 @@ def main():
     sess = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
     probe = feats[te_o[:256, None] + np.arange(-c, 0)]
     onnx_pred = sess.run(["load"], {"x": probe})[0]
+    # pred came from the GPU; allow for float32 differences between cuDNN and the CPU runtime.
     max_diff = float(np.abs(onnx_pred - pred[:256]).max())
-    assert max_diff < 0.05, max_diff  # MW
+    max_rel = float((np.abs(onnx_pred - pred[:256]) / np.abs(pred[:256])).max())
+    assert max_rel < 1e-4, (max_diff, max_rel)
 
     # Demo days: complete test days (midnight to midnight) with a complete previous day, spread over the year.
     day0 = split + int((86400 - (grid[split] % 86400)) // STEP) % 288  # first local midnight in the test range
@@ -248,6 +256,7 @@ def main():
             "train_origins": int(len(tr_o)),
             "train_seconds": final["seconds"],
             "onnx_max_abs_diff_mw": max_diff,
+            "onnx_max_rel_diff": max_rel,
         },
         "demo": {"dates": dates, "steps_per_day": 288},
         "data": {
