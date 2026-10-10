@@ -4,9 +4,13 @@ import { PageIntro } from "@/components/PageIntro";
 import { papers, patents, patentSearch } from "@/content/research";
 import styles from "../content.module.css";
 
+const published = patents.filter((p) => p.status === "Published");
+const filed = patents.filter((p) => p.status === "Filed");
+const presented = papers.filter((p) => p.status === "Presented");
+
 export const metadata: Metadata = {
   title: "Research",
-  description: "A first-author conference paper on solar-aware electricity demand forecasting, and published Indian patent applications.",
+  description: `First-author conference papers on electricity demand forecasting and assistive perception, ${published.length} published Indian patent applications and ${filed.length} more filed.`,
 };
 
 export default function Page() {
@@ -14,8 +18,8 @@ export default function Page() {
     <>
       <PageIntro eyebrow="Papers & patents" title="Research">
         <p>
-          A first-author paper on forecasting Delhi&apos;s electricity demand, and patent applications on assistive
-          navigation and sensor fusion.
+          First-author papers on forecasting Delhi&apos;s electricity demand and on assistive perception for blind
+          users, and patent applications in assistive navigation, sensing and infrastructure monitoring.
         </p>
       </PageIntro>
 
@@ -23,54 +27,62 @@ export default function Page() {
         <section className={styles.section} aria-labelledby="papers">
           <div className={styles.sectionHead}>
             <h2 id="papers">Papers</h2>
-            <span className={styles.sectionNote}>{papers.length} presented</span>
+            <span className={styles.sectionNote}>
+              {presented.length} presented · {papers.length - presented.length} under revision
+            </span>
           </div>
-          {papers.map((p) => (
-            <article key={p.title} className={styles.card} data-testid="paper">
-              <div className={styles.headRow}>
-                <p className={styles.meta}>
-                  <span>{p.venueShort}</span>
-                  <span>{p.date}</span>
-                  <span>{p.role}</span>
+          <div className={styles.stack}>
+            {papers.map((p) => (
+              <article key={p.title} className={styles.card} data-testid="paper" data-status={p.status}>
+                <div className={styles.headRow}>
+                  <p className={styles.meta}>
+                    <span>{p.venueShort}</span>
+                    <span>{p.date}</span>
+                    <span>{p.role}</span>
+                  </p>
+                  <span className={styles.badge} data-tone={p.status === "Presented" ? "good" : "warm"}>
+                    {p.status}
+                  </span>
+                </div>
+                <h3 className={styles.title}>{p.title}</h3>
+                <p className={styles.tagline}>
+                  {p.authors} · {p.venue}
                 </p>
-                <span className={styles.badge} data-tone="good">
-                  {p.status}
-                </span>
-              </div>
-              <h3 className={styles.title}>{p.title}</h3>
-              <p className={styles.tagline}>
-                {p.authors} · {p.venue}
-              </p>
-              <div className={styles.body}>
-                {p.summary.map((s) => (
-                  <p key={s}>{s}</p>
-                ))}
-              </div>
-              <dl className={styles.facts}>
-                {p.facts.map((f) => (
-                  <div key={f.label}>
-                    <dt>{f.label}</dt>
-                    <dd>{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-              {p.explore ? (
-                <p className={styles.links}>
-                  <Link href={p.explore.href}>{p.explore.label}</Link>
-                </p>
-              ) : null}
-            </article>
-          ))}
+                <div className={styles.body}>
+                  {p.summary.map((s) => (
+                    <p key={s}>{s}</p>
+                  ))}
+                </div>
+                {p.facts ? (
+                  <dl className={styles.facts}>
+                    {p.facts.map((f) => (
+                      <div key={f.label}>
+                        <dt>{f.label}</dt>
+                        <dd>{f.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
+                {p.explore ? (
+                  <p className={styles.links}>
+                    <Link href={p.explore.href}>{p.explore.label}</Link>
+                  </p>
+                ) : null}
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className={styles.section} aria-labelledby="patents">
           <div className={styles.sectionHead}>
             <h2 id="patents">Patents</h2>
-            <span className={styles.sectionNote}>{patents.length} published applications</span>
+            <span className={styles.sectionNote}>
+              {published.length} published · {filed.length} filed
+            </span>
           </div>
           <div className={styles.grid}>
-            {patents.map((p) => (
-              <article key={p.number} className={styles.card} data-testid="patent">
+            {published.map((p) => (
+              <article key={p.title} className={styles.card} data-testid="patent" data-status="Published">
                 <div className={styles.headRow}>
                   <p className={styles.meta}>
                     <span>{p.office}</span>
@@ -87,12 +99,32 @@ export default function Page() {
               </article>
             ))}
           </div>
+          <h3 className={styles.subhead} id="filed">
+            Filed, awaiting publication
+          </h3>
+          <div className={styles.grid}>
+            {filed.map((p) => (
+              <article key={p.title} className={styles.compact} data-testid="patent" data-status="Filed">
+                <div className={styles.headRow}>
+                  <p className={styles.meta}>
+                    <span>{p.office}</span>
+                    <span>{p.year}</span>
+                  </p>
+                  <span className={styles.badge} data-tone="warm">
+                    {p.status}
+                  </span>
+                </div>
+                <p className={styles.tagline}>{p.title}</p>
+              </article>
+            ))}
+          </div>
           <p className={styles.footnote}>
-            Application numbers can be looked up on the{" "}
+            Published application numbers can be looked up on the{" "}
             <a href={patentSearch} target="_blank" rel="noreferrer">
               Indian Patent Office public search
             </a>
-            . Further applications are in process and will be listed here once they are published.
+            . Filed applications are listed by subject only; their titles and numbers are added once they are
+            published.
           </p>
         </section>
       </div>

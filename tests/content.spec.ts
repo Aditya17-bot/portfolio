@@ -3,12 +3,18 @@ import { pullRequests } from "../src/content/openSource";
 import { featured, more } from "../src/content/projects";
 import { patents } from "../src/content/research";
 
-test("research lists the paper and every published patent with its application number", async ({ page }) => {
+test("research lists both papers, published patents with numbers and filed ones without", async ({ page }) => {
   await page.goto("/research");
-  await expect(page.getByTestId("paper")).toHaveCount(1);
-  await expect(page.getByTestId("paper")).toContainText("SIPCOV-2026");
-  await expect(page.getByTestId("patent")).toHaveCount(patents.length);
-  for (const p of patents) await expect(page.getByText(`Application No. ${p.number}`)).toBeVisible();
+  await expect(page.getByTestId("paper")).toHaveCount(2);
+  await expect(page.locator("[data-testid=paper][data-status=Presented]")).toContainText("SIPCOV-2026");
+  await expect(page.locator("[data-testid=paper][data-status='Under revision']")).toContainText("ICMLDE");
+  const published = patents.filter((p) => p.status === "Published");
+  await expect(page.locator("[data-testid=patent][data-status=Published]")).toHaveCount(published.length);
+  for (const p of published) await expect(page.getByText(`Application No. ${p.number}`)).toBeVisible();
+  // Filed applications carry no number until publication.
+  const filed = page.locator("[data-testid=patent][data-status=Filed]");
+  await expect(filed).toHaveCount(patents.length - published.length);
+  await expect(filed.getByText("Application No.")).toHaveCount(0);
 });
 
 test("open source separates merged from in-review and links each PR", async ({ page }) => {

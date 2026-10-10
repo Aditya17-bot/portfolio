@@ -65,8 +65,8 @@ export const chapters: Chapter[] = [
     title: "Projects, papers, patents",
     body: (
       <p>
-        An offline navigation aid for visually impaired users, a first-author paper at SIPCOV-2026, and two
-        published patent applications.
+        An offline navigation aid for visually impaired users, a first-author paper at SIPCOV-2026 and a second
+        under revision, two published patent applications and seven more filed.
       </p>
     ),
     links: [

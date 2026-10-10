@@ -42,8 +42,15 @@ export function searchIndex(): SearchItem[] {
       keywords: p.stack.join(" "),
     })),
     { id: "study-solar", group: "Research", title: "Solar-aware forecasting", hint: "The paper's idea rerun on public Delhi data, interactive", href: "/research/solar-forecasting", keywords: "lightgbm lstm load demand delhi sun duck curve" },
-    ...papers.map((p, i) => ({ id: `paper-${i}`, group: "Research" as const, title: p.title, hint: `${p.venueShort} · ${p.role}`, href: "/research" })),
-    ...patents.map((p) => ({ id: `patent-${p.number}`, group: "Research" as const, title: p.title, hint: `Patent application ${p.number} · ${p.status}`, href: "/research", keywords: "patent" })),
+    ...papers.map((p, i) => ({ id: `paper-${i}`, group: "Research" as const, title: p.title, hint: `${p.venueShort} · ${p.status}`, href: "/research#papers" })),
+    ...patents.map((p, i) => ({
+      id: `patent-${i}`,
+      group: "Research" as const,
+      title: p.title,
+      hint: p.number ? `Patent application ${p.number} · ${p.status}` : `Patent application · ${p.status}`,
+      href: p.number ? "/research#patents" : "/research#filed",
+      keywords: "patent",
+    })),
     ...pullRequests.map((pr) => ({
       id: `pr-${pr.repo}-${pr.number}`,
       group: "Open source" as const,

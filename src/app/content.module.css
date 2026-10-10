@@ -279,3 +279,10 @@
     gap: 6px;
   }
 }
+
+.subhead {
+  margin: 28px 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+}

@@ -44,7 +44,8 @@ export default function Page() {
               Most of my work is computer vision and applied ML. I built BlindAssist, an offline navigation aid that
               decides what is worth saying to a visually impaired user, and ranked in the top 4% of the Amazon ML
               Challenge with an entity-resolution pipeline over ten million records. I presented a first-author paper
-              on electricity demand forecasting at SIPCOV-2026, and I have published patent applications.
+              on electricity demand forecasting at SIPCOV-2026, have a second, on BlindAssist, under revision at ICMLDE, and have
+              two published patent applications with seven more filed.
             </p>
             <p>
               I also fix bugs upstream, in kornia, timm and Haystack. The models on this site are trained from

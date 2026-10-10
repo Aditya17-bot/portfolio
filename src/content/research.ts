@@ -5,17 +5,18 @@ export type Paper = {
   venue: string;
   venueShort: string;
   date: string;
-  status: string;
+  status: "Presented" | "Under revision";
   summary: string[];
-  facts: { label: string; value: string }[];
+  facts?: { label: string; value: string }[];
   explore?: { label: string; href: string };
 };
 
 export type Patent = {
-  number: string;
+  /** Application number; filed applications get theirs listed once published. */
+  number?: string;
   title: string;
   office: string;
-  status: string;
+  status: "Published" | "Filed";
   year: string;
 };
 
@@ -42,8 +43,23 @@ export const papers: Paper[] = [
     ],
     explore: { label: "Rerun on public data: try it", href: "/research/solar-forecasting" },
   },
+  {
+    title:
+      "Cross-Layer Selective Abstention for Reliable Offline Assistive Perception with Tool-Mediated Voice Interaction for Visually Impaired Users",
+    authors: "Aditya Sridhar, Vani Rajasekar, Yuvan Raj Mathan, Goureesankar S Nair",
+    role: "First author",
+    venue: "ICMLDE, conference paper",
+    venueShort: "ICMLDE",
+    date: "2026",
+    status: "Under revision",
+    summary: [
+      "The paper behind BlindAssist: for a blind user a confident wrong answer costs more than silence, so every layer of the system that can be wrong is able to decline to answer, each on its own terms rather than through one shared confidence score.",
+    ],
+    explore: { label: "The BlindAssist project", href: "/projects#blindassist" },
+  },
 ];
 
+// Filed applications are listed by subject only, in plain words, until they are published.
 export const patents: Patent[] = [
   {
     number: "202641110070",
@@ -60,6 +76,15 @@ export const patents: Patent[] = [
     status: "Published",
     year: "2026",
   },
+  ...[
+    "Detecting coordinated malpractice in examination halls",
+    "Detecting externally assisted malpractice at examination stations",
+    "Reconstructing missing traffic counts in detector networks",
+    "Recalibrating vehicle-length classification at roadside detectors",
+    "Correcting the stage offset of river gauging stations",
+    "Gas-hazard classification and mitigation in ventilated spaces",
+    "Self-recalibrating water-content sensors for greenhouse irrigation",
+  ].map((title): Patent => ({ title, office: "Indian Patent Office", status: "Filed", year: "2026" })),
 ];
 
 export const patentSearch = "https://iprsearch.ipindia.gov.in/PublicSearch/";
