@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     return [
       { source: "/ort/:path*", headers: longCache },
       { source: "/models/:slug/:file(.+\\.(?:onnx|bin|json))", headers: longCache },
+      { source: "/projects/:slug/:file(.+\\.(?:onnx|bin|json))", headers: longCache },
     ];
   },
 };

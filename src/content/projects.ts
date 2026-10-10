@@ -34,7 +34,7 @@ export const featured: Project[] = [
       { label: "Unit tests", value: "61" },
     ],
     repo: gh("object_detection_blind"),
-    demo: { label: "Run it in your browser", href: "https://huggingface.co/spaces/aditya34587654/blindassist" },
+    demo: { label: "Try it and see how it decides", href: "/projects/blindassist" },
     team: "Team project",
   },
   {

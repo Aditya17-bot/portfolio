@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const routes = ["/", "/models", "/models/mlp-numpy", "/models/cnn-mnist", "/models/cnn-cifar10", "/models/vae-mnist", "/models/resnet-cifar10", "/models/mini-gpt", "/models/vit-cifar10", "/models/dcgan-mnist", "/models/lstm-load", "/projects", "/projects/fraud", "/research", "/research/solar-forecasting", "/open-source", "/learn", "/about"];
+const routes = ["/", "/models", "/models/mlp-numpy", "/models/cnn-mnist", "/models/cnn-cifar10", "/models/vae-mnist", "/models/resnet-cifar10", "/models/mini-gpt", "/models/vit-cifar10", "/models/dcgan-mnist", "/models/lstm-load", "/projects", "/projects/blindassist", "/projects/fraud", "/research", "/research/solar-forecasting", "/open-source", "/learn", "/about"];
 
 function collectErrors(page: Page) {
   const errors: string[] = [];

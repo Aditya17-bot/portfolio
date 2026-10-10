@@ -32,6 +32,7 @@ export function searchIndex(): SearchItem[] {
         href: `/models/${m.slug}`,
         keywords: m.summary,
       })),
+    { id: "demo-blindassist", group: "Projects", title: "BlindAssist demo", hint: "Both detectors and the decision rules on your camera or photos", href: "/projects/blindassist", keywords: "blind assist yolo camera webcam obstacle door" },
     { id: "study-fraud", group: "Projects", title: "Fraud alert budget", hint: "Random forest vs isolation forest, interactive", href: "/projects/fraud", keywords: "fraud detection card transactions sparkov threshold precision recall" },
     ...[...featured, ...more].map((p) => ({
       id: `project-${p.slug}`,

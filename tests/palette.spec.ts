@@ -48,7 +48,7 @@ test.describe("Command palette", () => {
       await expect(palette).toBeVisible({ timeout: 1000 });
     }).toPass();
     await page.getByTestId("palette-input").fill("blind assist");
-    await page.getByTestId("palette-option").filter({ hasText: "BlindAssist" }).first().click();
+    await page.getByTestId("palette-option").filter({ has: page.getByText("BlindAssist", { exact: true }) }).click();
     await expect(page).toHaveURL(/\/projects#blindassist$/);
   });
 
