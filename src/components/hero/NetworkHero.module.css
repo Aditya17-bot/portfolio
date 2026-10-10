@@ -58,9 +58,10 @@
   padding: var(--header-h) var(--gutter) 0;
 }
 
-/* Later chapters need less room than the opening screen; a full screen each left long empty gaps. */
+/* Later chapters size to their content plus even padding, so the gap between any two is the same. */
 .chapter:not(:first-child) {
-  min-height: 68dvh;
+  min-height: 0;
+  padding: clamp(56px, 9vh, 96px) var(--gutter);
 }
 
 .card {
@@ -147,6 +148,11 @@
   .chapter {
     align-items: flex-end;
     padding-bottom: 48px;
+  }
+
+  .chapter:not(:first-child) {
+    padding-top: 64px;
+    padding-bottom: 64px;
   }
 
   .body {

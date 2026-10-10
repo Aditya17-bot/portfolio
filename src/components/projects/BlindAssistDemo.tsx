@@ -4,11 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { analyse, L, loadModels, sentence, TARGETS, walkReasons, type Analysis, type Det, type Info, type Mode } from "@/lib/blindassist/detect";
 import styles from "./BlindAssistDemo.module.css";
 
-const EXAMPLES = [
-  { src: "/projects/blindassist/examples/wardrobe_close.jpg", label: "Wardrobe, close", mode: "walk" as Mode },
-  { src: "/projects/blindassist/examples/classroom_desks.jpg", label: "Find the bottle", mode: "find" as Mode, target: "bottle" },
-  { src: "/projects/blindassist/examples/classroom_door.jpg", label: "Classroom door", mode: "walk" as Mode },
-  { src: "/projects/blindassist/examples/hostel_doors.jpg", label: "Hostel corridor", mode: "describe" as Mode },
+const EXAMPLES: { src: string; label: string; mode: Mode; target?: string }[] = [
+  { src: "/projects/blindassist/examples/room_chairs.jpg", label: "Chairs and a wardrobe", mode: "walk" },
+  { src: "/projects/blindassist/examples/desk_clutter.jpg", label: "Find the bottle", mode: "find", target: "bottle" },
+  { src: "/projects/blindassist/examples/couch_door.jpg", label: "Couch by a door", mode: "walk" },
+  { src: "/projects/blindassist/examples/washroom.jpg", label: "Washroom", mode: "describe" },
+  { src: "/projects/blindassist/examples/classroom_door.jpg", label: "Classroom door", mode: "walk" },
+  { src: "/projects/blindassist/examples/wardrobe_close.jpg", label: "Wardrobe up close", mode: "walk" },
 ];
 
 const STEPS = [
@@ -217,7 +219,7 @@ export function BlindAssistDemo() {
                 stopCamera();
                 setPicked(i);
                 setMode(e.mode);
-                if ("target" in e && e.target) setTarget(e.target);
+                if (e.target) setTarget(e.target);
                 setAnalysis(null);
                 openImage(e.src);
               }}
