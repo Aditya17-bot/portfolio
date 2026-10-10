@@ -1,108 +1,39 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
+import { WorkGrid, type WorkItem } from "@/components/work/WorkGrid";
+import { explainers } from "@/content/learn";
 import { modelBySlug } from "@/content/models";
-import styles from "../content.module.css";
 
 export const metadata: Metadata = {
   title: "Learn",
-  description: "A reading path through deep learning, one idea per model, each with a network you can run next to it.",
+  description: "Six ideas behind modern deep learning, each with a short animation and a lab you can play with.",
 };
 
-// Each lesson is the "How it works" part of a model page; the model is the worked example.
-const lessons = [
-  {
-    slug: "mlp-numpy",
-    anchor: "how",
-    idea: "Neurons, layers and backpropagation",
-    question: "How does a network turn pixels into a guess, and how does a wrong guess change its weights?",
-  },
-  {
-    slug: "cnn-mnist",
-    anchor: "how",
-    idea: "Convolutions",
-    question: "Why does sliding one small filter over the image beat a weight for every pixel, with 14× fewer parameters?",
-  },
-  {
-    slug: "cnn-cifar10",
-    anchor: "how",
-    idea: "Where the model looked",
-    question: "How can a classifier point at the part of a photo that decided its answer, without any gradients?",
-  },
-  {
-    slug: "resnet-cifar10",
-    anchor: "gradients",
-    idea: "Depth and skip connections",
-    question: "Why does a deeper plain network train worse, and what does one identity shortcut change?",
-  },
-  {
-    slug: "vae-mnist",
-    anchor: "how",
-    idea: "Learning a space instead of a label",
-    question: "What does a model need so that every point between two digits decodes to something sensible?",
-  },
-  {
-    slug: "dcgan-mnist",
-    anchor: "how",
-    idea: "Two networks in competition",
-    question: "How can a model learn to draw digits without ever being told what a good drawing is?",
-  },
-  {
-    slug: "lstm-load",
-    anchor: "how",
-    idea: "Sequences and memory",
-    question: "How does a network read 288 time steps in order and carry what matters to the end?",
-  },
-  {
-    slug: "mini-gpt",
-    anchor: "how",
-    idea: "Attention",
-    question: "How does a transformer decide which earlier characters matter for the next one?",
-  },
-  {
-    slug: "vit-cifar10",
-    anchor: "compare",
-    idea: "Attention instead of convolution",
-    question: "What happens when an image model has to learn, from 50,000 photos, what a convolution assumes for free?",
-  },
-];
-
 export default function Page() {
-  const live = lessons.filter((l) => modelBySlug(l.slug)?.status === "live");
+  const items: WorkItem[] = explainers.map((e, i) => ({
+    id: e.slug,
+    href: `/learn/${e.slug}`,
+    title: e.title,
+    kind: e.group,
+    group: e.group,
+    summary: e.question,
+    metric: { value: `${e.seconds} s`, label: "animation, then a lab" },
+    facts: [`used in ${modelBySlug(e.model.slug)?.title ?? e.model.label}`],
+    status: "Interactive",
+    step: i + 1,
+    testId: "lesson",
+  }));
   return (
     <>
       <PageIntro eyebrow="Explainers" title="Learn">
         <p>
-          A path through deep learning, one idea at a time. Each idea is explained on the page of the model that
-          needs it, next to a version of that model you can run.
+          The ideas behind the models, one at a time. Each starts with a short animation, explains the idea in a few
+          paragraphs and ends with a lab to play with. The Models pages show what each idea achieves once trained;
+          these show why it works.
         </p>
       </PageIntro>
       <div className="container">
-        <section className={styles.section} aria-labelledby="path">
-          <div className={styles.sectionHead}>
-            <h2 id="path">The path</h2>
-            <span className={styles.sectionNote}>{live.length} ideas so far</span>
-          </div>
-          <ol className={styles.stack} style={{ listStyle: "none", margin: 0, padding: 0 }}>
-            {live.map((l, i) => {
-              const m = modelBySlug(l.slug)!;
-              return (
-                <li key={l.slug} className={styles.compact} data-testid="lesson">
-                  <p className={styles.meta}>
-                    <span>{String(i + 1).padStart(2, "0")}</span>
-                    <span>{m.title}</span>
-                  </p>
-                  <h3 className={styles.title}>
-                    <Link href={`/models/${l.slug}#${l.anchor}`} className={styles.titleLink}>
-                      {l.idea}
-                    </Link>
-                  </h3>
-                  <p className={styles.tagline}>{l.question}</p>
-                </li>
-              );
-            })}
-          </ol>
-        </section>
+        <WorkGrid items={items} groups={["Training", "Vision", "Sequence", "Generative"]} label="explainers" />
       </div>
     </>
   );

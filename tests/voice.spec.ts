@@ -31,7 +31,11 @@ test("splitter playground holds back the unfinished sentence", async ({ page }) 
   await page.goto("/projects/voice-assistant");
   const s = page.getByTestId("vx-splitter");
   await expect(s.getByTestId("vx-sentence")).toHaveCount(2);
-  await s.getByTestId("vx-split-input").fill("One. Two. Three");
-  await expect(s.getByTestId("vx-sentence")).toHaveCount(2);
+  // Retry until hydrated: typing before React attaches loses the edit.
+  await expect(async () => {
+    await s.getByTestId("vx-split-input").fill("One. Two. Three");
+    await expect(s.getByTestId("vx-sentence")).toHaveCount(2, { timeout: 1000 });
+    await expect(s).toContainText("Three", { timeout: 1000 });
+  }).toPass();
   await expect(s).toContainText("held back");
 });

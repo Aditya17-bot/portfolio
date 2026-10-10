@@ -54,17 +54,6 @@ test("about has contact links", async ({ page }) => {
   expect(resume.headers()["content-type"]).toContain("pdf");
 });
 
-test("learn links each idea to a live model page section", async ({ page }) => {
-  await page.goto("/learn");
-  const lessons = page.getByTestId("lesson");
-  expect(await lessons.count()).toBeGreaterThanOrEqual(5);
-  const first = lessons.first().getByRole("link");
-  await expect(first).toHaveAttribute("href", "/models/mlp-numpy#how");
-  await first.click();
-  await expect(page).toHaveURL(/\/models\/mlp-numpy#how$/);
-  await expect(page.locator("#how")).toBeInViewport();
-});
-
 test("share image, sitemap and robots are served", async ({ page, request }) => {
   await page.goto("/");
   const og = await page.locator('meta[property="og:image"]').getAttribute("content");

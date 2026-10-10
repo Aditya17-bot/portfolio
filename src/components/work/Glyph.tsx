@@ -301,7 +301,43 @@ function Fraud() {
   );
 }
 
+function Overfit() {
+  const r = rng("overfit");
+  const pts = Array.from({ length: 12 }, (_, i) => {
+    const x = 0.04 + (i / 11) * 0.92;
+    return [x, Math.sin(2 * Math.PI * x) + (r() - 0.5) * 0.5] as [number, number];
+  });
+  const X = (v: number) => 30 + v * 260;
+  const Y = (v: number) => 90 - v * 55;
+  const truth = Array.from({ length: 60 }, (_, i) => [X(i / 59), Y(Math.sin((2 * Math.PI * i) / 59))] as [number, number]);
+  // A curve that threads every point: piecewise through them with overshoot.
+  const wiggle: [number, number][] = [];
+  for (let i = 0; i < pts.length - 1; i++)
+    for (let k = 0; k < 8; k++) {
+      const t = k / 8;
+      const [x0, y0] = pts[i];
+      const [x1, y1] = pts[i + 1];
+      wiggle.push([X(x0 + (x1 - x0) * t), Y(y0 + (y1 - y0) * t + Math.sin(t * Math.PI) * (i % 2 ? 0.35 : -0.35))]);
+    }
+  return (
+    <>
+      <path d={path(truth)} className={styles.greyLine} />
+      <path d={path(wiggle)} className={styles.amberLine} />
+      {pts.map(([x, y], i) => (
+        <circle key={i} cx={X(x)} cy={Y(y)} r={4} className={styles.node} />
+      ))}
+      <path d={path(wiggle.slice(20, 50))} className={styles.pulse} />
+    </>
+  );
+}
+
 const GLYPHS: Record<string, () => ReactNode> = {
+  backprop: Mlp,
+  convolution: CnnMnist,
+  residual: Resnet,
+  attention: Gpt,
+  latent: Vae,
+  overfitting: Overfit,
   "mlp-numpy": Mlp,
   "cnn-mnist": CnnMnist,
   "cnn-cifar10": Cifar,

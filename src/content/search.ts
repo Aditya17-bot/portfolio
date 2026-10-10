@@ -1,3 +1,4 @@
+import { explainers } from "./learn";
 import { models } from "./models";
 import { pullRequests } from "./openSource";
 import { featured, more } from "./projects";
@@ -37,6 +38,14 @@ export function searchIndex(): SearchItem[] {
     { id: "demo-operator", group: "Projects", title: "Operator cab simulator", hint: "Safety rules, overheat forecast and speed advisor on a machine you drive", href: "/projects/caterpillar", keywords: "excavator caterpillar safety seatbelt overheat machine operator" },
     { id: "demo-voice", group: "Projects", title: "Voice assistant demo", hint: "One spoken turn replayed stage by stage: streaming, fillers, barge-in", href: "/projects/voice-assistant", keywords: "voice speech whisper llm tts streaming barge-in offline" },
     { id: "demo-amazon", group: "Projects", title: "Entity matcher walk-through", hint: "Normalisation, similarity features and decoy checks on records you type", href: "/projects/amazon-ml-challenge", keywords: "amazon entity resolution matching records decoy business" },
+    ...explainers.map((e) => ({
+      id: `learn-${e.slug}`,
+      group: "Pages" as const,
+      title: `${e.title}, explained`,
+      hint: e.question,
+      href: `/learn/${e.slug}`,
+      keywords: "learn explainer animation lab",
+    })),
     { id: "study-fraud", group: "Projects", title: "Fraud alert budget", hint: "Random forest vs isolation forest, interactive", href: "/projects/fraud", keywords: "fraud detection card transactions sparkov threshold precision recall" },
     ...[...featured, ...more].map((p) => ({
       id: `project-${p.slug}`,
