@@ -1,0 +1,174 @@
+.wrap {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.pickers {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.thumb {
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #000;
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 1;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.thumb:hover:not(:disabled),
+.thumb:focus-visible {
+  border-color: var(--activation);
+}
+
+.thumb:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.thumb canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  position: relative;
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.btn:focus-within {
+  outline: 2px solid var(--activation);
+  outline-offset: 2px;
+}
+
+.file {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.stage {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.frame {
+  position: relative;
+  width: 224px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--border);
+}
+
+.image,
+.heat {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  image-rendering: pixelated;
+}
+
+.heat {
+  mix-blend-mode: screen;
+}
+
+.frame[data-empty] .image {
+  visibility: hidden;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.caption {
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+  max-width: 224px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.side {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .thumbs {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .result {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .frame {
+    width: min(224px, 100%);
+  }
+}

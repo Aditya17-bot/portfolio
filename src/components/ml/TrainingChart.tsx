@@ -1,7 +1,7 @@
 import type { LogRow } from "@/lib/runlog";
 import styles from "./TrainingChart.module.css";
 
-type Series = { key: string; label: string; tone: "a" | "b" };
+export type Series = { key: string; label: string; tone: "a" | "b" | "c" | "d" };
 
 /** A small line chart of a training log, drawn as plain SVG at build time. */
 export function TrainingChart({
@@ -11,6 +11,7 @@ export function TrainingChart({
   format = (v) => v.toFixed(3),
   caption,
   max,
+  dots = true,
 }: {
   rows: LogRow[];
   series: Series[];
@@ -19,12 +20,14 @@ export function TrainingChart({
   caption?: string;
   /** Upper bound for the axis, e.g. 1 for accuracy. */
   max?: number;
+  /** One marker per epoch; off for long or crowded runs. */
+  dots?: boolean;
 }) {
   const W = 560;
   const H = 220;
   const pad = { l: 52, r: 16, t: 14, b: 30 };
   const xs = rows.map((r) => r.epoch);
-  const values = rows.flatMap((r) => series.map((s) => r[s.key]));
+  const values = rows.flatMap((r) => series.map((s) => r[s.key])).filter(Number.isFinite);
   let lo = Math.min(...values);
   let hi = Math.max(...values);
   const span = hi - lo || 1;
@@ -71,7 +74,7 @@ export function TrainingChart({
           />
         ))}
         {series.map((s) =>
-          rows.map((r) => (
+          (dots ? rows : []).map((r) => (
             <circle key={`${s.key}${r.epoch}`} data-tone={s.tone} className={styles.dot} cx={x(r.epoch)} cy={y(r[s.key])} r={2.2}>
               <title>{`epoch ${r.epoch} · ${s.label} ${format(r[s.key])}`}</title>
             </circle>

@@ -75,3 +75,7 @@
   grid-template-columns: 12px 1fr 44px;
   font-size: 11px;
 }
+
+.bars[data-wide] li {
+  grid-template-columns: 84px 1fr 48px;
+}

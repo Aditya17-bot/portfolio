@@ -81,3 +81,24 @@
   font-size: 13px;
   color: var(--text-muted);
 }
+
+.legend span[data-tone="c"]::before,
+.line[data-tone="c"] {
+  background: var(--weight-neg);
+  stroke: var(--weight-neg);
+}
+
+.legend span[data-tone="d"]::before,
+.line[data-tone="d"] {
+  background: var(--text-muted);
+  stroke: var(--text-muted);
+}
+
+.line[data-tone="c"],
+.line[data-tone="d"] {
+  stroke-dasharray: 5 4;
+}
+
+.legend {
+  flex-wrap: wrap;
+}
