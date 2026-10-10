@@ -1,0 +1,46 @@
+.wrap {
+  position: relative;
+  max-width: 100%;
+}
+
+.pad {
+  display: block;
+  max-width: 100%;
+  aspect-ratio: 1;
+  height: auto !important;
+  border-radius: var(--radius);
+  border: 1px solid rgba(92, 225, 230, 0.35);
+  background: #000;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #6b7589;
+}
+
+.clear {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #2a3550;
+  background: rgba(11, 15, 26, 0.85);
+  color: #e6eaf2;
+  cursor: pointer;
+}
+
+.clear:disabled {
+  opacity: 0;
+  pointer-events: none;
+}

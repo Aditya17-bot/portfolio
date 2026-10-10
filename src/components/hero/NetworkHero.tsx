@@ -113,6 +113,7 @@ export function NetworkHero() {
               <p className={styles.layer}>{c.layer}</p>
               {i === 0 ? <h1 className={styles.title}>{c.title}</h1> : <h2 className={styles.heading}>{c.title}</h2>}
               <div className={styles.body}>{c.body}</div>
+              {c.extra}
               {c.links ? <ChapterLinks links={c.links} /> : null}
               {i === 0 ? (
                 <p className={styles.hint} aria-hidden="true">

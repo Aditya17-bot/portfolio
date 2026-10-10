@@ -5,6 +5,9 @@
   background: #05070d;
   color: #e6eaf2;
   --hero-muted: #9aa4b8;
+  --activation: #5ce1e6;
+  --signal: #f5a524;
+  --text-muted: #9aa4b8;
 }
 
 .stage {

@@ -3,7 +3,8 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
-import { rasteriseDigit } from "@/lib/digits";
+import { drawnInput } from "@/lib/drawnInput";
+import type { TrainedMlp } from "@/lib/mlp";
 import {
   ARCH,
   argmax,
@@ -11,7 +12,6 @@ import {
   layoutLayers,
   meanActivations,
   normalise,
-  randomWeights,
   selectEdges,
   type Weights,
 } from "@/lib/network";
@@ -70,26 +70,51 @@ type Props = {
   /** Scroll position in stops: 0 = overview, 1 = input layer, ... */
   progress: RefObject<number>;
   reducedMotion: boolean;
-  weights?: Weights;
+  model: TrainedMlp;
 };
 
-export function NetworkScene({ progress, reducedMotion, weights: given }: Props) {
-  const { camera, size } = useThree();
+type Pass = { acts: Float32Array[]; pred: number };
+
+function runPass(weights: Weights, x: Float32Array): Pass {
+  const acts = forward(weights, x);
+  return { acts: acts.map(normalise), pred: argmax(acts[acts.length - 1]) };
+}
+
+// A drawing stays on the network this long after the last stroke.
+const DRAWN_HOLD = 12;
+
+export function NetworkScene({ progress, reducedMotion, model }: Props) {
+  const { camera, size, invalidate } = useThree();
 
   const net = useMemo(() => {
-    const weights = given ?? randomWeights();
+    const { weights, samples } = model;
     const layout = layoutLayers(ARCH);
-    const samples = Array.from({ length: 10 }, (_, d) => rasteriseDigit(d, d));
     const mean = meanActivations(weights, samples);
     const edges = selectEdges(weights, ARCH, [4, 3, 6], mean);
-    const passes = samples.map((x) => {
-      const acts = forward(weights, x);
-      return { acts: acts.map(normalise), probs: acts[acts.length - 1], pred: argmax(acts[acts.length - 1]) };
-    });
+    const passes = samples.map((x) => runPass(weights, x));
     let maxW = 0;
     for (const e of edges) maxW = Math.max(maxW, Math.abs(e.weight));
-    return { layout, edges, passes, maxW };
-  }, [given]);
+    return { weights, layout, edges, passes, maxW };
+  }, [model]);
+
+  // The visitor's drawing, when there is one: its pass and when it started showing.
+  const drawn = useRef<{ pass: Pass; start: number; last: number } | null>(null);
+  const clockRef = useRef(0);
+  useEffect(
+    () =>
+      drawnInput.subscribe(() => {
+        const { input } = drawnInput.get();
+        if (!input) {
+          drawn.current = null;
+          invalidate();
+          return;
+        }
+        const t = clockRef.current;
+        drawn.current = { pass: runPass(net.weights, input), start: drawn.current?.start ?? t, last: t };
+        invalidate();
+      }),
+    [net, invalidate],
+  );
 
   const disc = useMemo(() => discTexture(), []);
   const labels = useMemo(() => Array.from({ length: 10 }, (_, d) => labelTexture(String(d))), []);
@@ -204,10 +229,23 @@ export function NetworkScene({ progress, reducedMotion, weights: given }: Props)
     camera.lookAt(lookAt.current);
 
     // --- Forward pass animation ---------------------------------------------------------
-    const cycle = reducedMotion ? 0 : Math.floor(t / CYCLE);
-    const tc = reducedMotion ? 2.8 : t % CYCLE;
-    const pass = net.passes[cycle % net.passes.length];
-    const fadeOut = 1 - smooth(T_FADE_OUT, CYCLE, tc);
+    clockRef.current = t;
+    if (drawn.current && t - drawn.current.last > DRAWN_HOLD) drawn.current = null;
+    const user = drawn.current;
+    let pass: Pass;
+    let tc: number;
+    let fadeOut: number;
+    if (user) {
+      // The visitor's own digit: play the pass once, then hold it lit while they draw.
+      pass = user.pass;
+      tc = Math.min(t - user.start, T_FADE_OUT - 0.4);
+      fadeOut = 1;
+    } else {
+      const cycle = reducedMotion ? 0 : Math.floor(t / CYCLE);
+      pass = net.passes[cycle % net.passes.length];
+      tc = reducedMotion ? 2.8 : t % CYCLE;
+      fadeOut = 1 - smooth(T_FADE_OUT, CYCLE, tc);
+    }
     const lit = [smooth(0, T_INPUT, tc), 0, 0, 0].map((v, l) =>
       l === 0 ? v * fadeOut : smooth(T_INPUT + T_HOP * l - 0.1, T_INPUT + T_HOP * l + 0.15, tc) * fadeOut,
     );

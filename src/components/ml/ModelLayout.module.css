@@ -1,0 +1,179 @@
+.header {
+  padding-top: clamp(40px, 7vw, 80px);
+  display: grid;
+  gap: 14px;
+}
+
+.crumbs {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.crumbs a {
+  color: var(--text-muted);
+}
+
+.crumbs a:hover {
+  color: var(--text);
+}
+
+.live {
+  color: var(--activation);
+}
+
+.title {
+  font-size: clamp(34px, 5.5vw, 52px);
+  font-weight: 650;
+}
+
+.lede {
+  max-width: 64ch;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.stats {
+  margin: 8px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.stats div {
+  padding: 14px 16px;
+  background: var(--surface);
+}
+
+.stats dt,
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.stats dd {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.section {
+  margin-top: 56px;
+  display: grid;
+  gap: 16px;
+}
+
+.h2 {
+  font-size: 24px;
+  font-weight: 620;
+}
+
+.section :global(.prose) {
+  max-width: 68ch;
+  display: grid;
+  gap: 14px;
+  color: var(--text-muted);
+}
+
+.section :global(.prose) strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.section :global(.prose) code {
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td {
+  border-bottom: 0;
+}
+
+.table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-faint);
+  background: var(--surface);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.src {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.repro {
+  display: grid;
+  gap: 14px;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
+}
+
+.facts dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.step {
+  display: grid;
+  gap: 6px;
+}
+
+.stepLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pre {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 13px;
+  overflow-x: auto;
+}

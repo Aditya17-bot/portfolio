@@ -1,12 +1,17 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { site } from "@/content/site";
+import { MlpPlayground } from "@/components/ml/MlpPlayground";
+import meta from "../../../public/models/mlp/meta.json";
+
+const acc = (meta.results.test_acc * 100).toFixed(2);
 
 export type Chapter = {
   id: string;
   layer: string;
   title: ReactNode;
   body: ReactNode;
+  extra?: ReactNode;
   links?: { href: string; label: string; external?: boolean }[];
 };
 
@@ -25,7 +30,7 @@ export const chapters: Chapter[] = [
     body: (
       <p>
         I train neural networks from scratch and put them where you can push on them. The one behind this text is
-        running now. Scroll to follow a forward pass through it.
+        real: trained on MNIST, running in your browser now. Scroll to follow a forward pass, or draw it a digit.
       </p>
     ),
   },
@@ -35,10 +40,11 @@ export const chapters: Chapter[] = [
     title: "Where it starts",
     body: (
       <p>
-        Computer Science and Engineering at VIT Vellore, graduating 2027. Every network starts the same way: a grid
-        of numbers and no idea what they mean yet.
+        Computer Science and Engineering at VIT Vellore, graduating 2027. Every network starts the same way, with a
+        grid of numbers. Draw one below and watch it go through.
       </p>
     ),
+    extra: <MlpPlayground variant="hero" linkHero />,
     links: [{ href: "/about", label: "About me" }],
   },
   {
@@ -86,11 +92,12 @@ export const chapters: Chapter[] = [
     title: "That was one forward pass.",
     body: (
       <p>
-        784 → 128 → 64 → 10, with the strongest connections drawn. The weights are still random: the trained ones
-        replace them next. If you want to talk about the work, write to me.
+        784 → 128 → 64 → 10, trained in NumPy with backpropagation written by hand: {acc}% on the 10,000 MNIST test
+        digits. The strongest connections are drawn. If you want to talk about the work, write to me.
       </p>
     ),
     links: [
+      { href: "/models/mlp-numpy", label: "How it was trained" },
       { href: `mailto:${site.email}`, label: "Email", external: true },
       { href: site.github, label: "GitHub", external: true },
       { href: site.linkedin, label: "LinkedIn", external: true },

@@ -1,0 +1,83 @@
+.figure {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.legend {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--activation);
+}
+
+.legend span[data-tone="b"]::before {
+  background: var(--signal);
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.tick {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-faint);
+}
+
+.line {
+  fill: none;
+  stroke: var(--activation);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.line[data-tone="b"],
+.dot[data-tone="b"] {
+  stroke: var(--signal);
+}
+
+.dot {
+  fill: var(--surface);
+  stroke: var(--activation);
+  stroke-width: 1.4;
+}
+
+.dot[data-tone="b"] {
+  fill: var(--surface);
+}
+
+.caption {
+  font-size: 13px;
+  color: var(--text-muted);
+}

@@ -6,12 +6,12 @@ test.describe("neural network hero", () => {
     page.on("pageerror", (e) => errors.push(e.message));
     page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
     await page.goto("/");
-    await expect(page.locator("[data-testid=hero] canvas")).toBeVisible({ timeout: 20_000 });
+    await expect(page.locator("[data-testid=hero] canvas[data-engine]")).toBeVisible({ timeout: 20_000 });
     await expect(page.locator("[data-chapter]")).toHaveCount(6);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Models you can run");
     // The canvas must actually paint something, not stay a blank clear colour.
     await page.waitForTimeout(1500);
-    const lit = await page.locator("[data-testid=hero] canvas").screenshot();
+    const lit = await page.locator("[data-testid=hero] canvas[data-engine]").screenshot();
     expect(lit.byteLength).toBeGreaterThan(20_000);
     expect(errors).toEqual([]);
   });

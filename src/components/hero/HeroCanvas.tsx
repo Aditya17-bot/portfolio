@@ -1,7 +1,8 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import type { RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
+import { loadMlp, type TrainedMlp } from "@/lib/mlp";
 import { NetworkScene } from "./NetworkScene";
 
 export default function HeroCanvas({
@@ -13,6 +14,11 @@ export default function HeroCanvas({
   running: boolean;
   reducedMotion: boolean;
 }) {
+  const [model, setModel] = useState<TrainedMlp | null>(null);
+  useEffect(() => {
+    loadMlp().then(setModel, () => setModel(null));
+  }, []);
+
   return (
     <Canvas
       dpr={[1, 1.75]}
@@ -22,7 +28,7 @@ export default function HeroCanvas({
       onCreated={({ gl }) => gl.setClearColor("#05070d")}
       aria-hidden="true"
     >
-      <NetworkScene progress={progress} reducedMotion={reducedMotion} />
+      {model ? <NetworkScene progress={progress} reducedMotion={reducedMotion} model={model} /> : null}
     </Canvas>
   );
 }
