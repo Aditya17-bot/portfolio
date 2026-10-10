@@ -30,6 +30,8 @@ test.describe("neural network hero", () => {
     await page.goto("/");
     const link = page.locator("[data-chapter=models]").getByRole("link", { name: /Open the zoo/ });
     await link.scrollIntoViewIfNeeded();
+    // Wait until the chapter is the active one, so its card has finished sliding into place.
+    await expect(page.locator("[data-chapter=models][data-active]")).toHaveCount(1);
     await link.click();
     await expect(page).toHaveURL(/\/models$/);
   });

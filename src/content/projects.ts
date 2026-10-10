@@ -82,6 +82,7 @@ export const featured: Project[] = [
       "Spatial proximity analysis: finds clusters of variants that are close in 3D even when they are far apart in sequence.",
     ],
     repo: gh("Gene-Anomaly-detection"),
+    demo: { label: "Explore a protein in 3D", href: "/projects/gene-anomaly" },
     team: "Team project",
   },
 ];
