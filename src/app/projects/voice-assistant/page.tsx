@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { ModelHeader, ResultsTable, Section } from "@/components/ml/ModelLayout";
-import { VoiceDemo } from "@/components/projects/VoiceDemo";
+import { SplitterPlay, VoiceExplainer } from "@/components/projects/VoiceExplainer";
 
 const REPO = "https://github.com/Aditya17-bot/voice_ai";
 
 export const metadata: Metadata = {
   title: "Offline voice assistant",
   description:
-    "Talk to a speech-in, speech-out assistant that runs entirely in your browser, and watch where the time goes between your last word and its first.",
+    "An offline speech-in, speech-out assistant, replayed stage by stage: see where the time goes between your last word and its first, and what streaming, fillers and barge-in change.",
 };
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
       <ModelHeader
         crumb={{ href: "/projects#voice-assistant", label: "Projects" }}
         kind="Project"
-        badge="runs in your browser"
+        badge="interactive"
         family="Offline voice assistant"
         date="2026"
         title="A voice assistant with nothing in the cloud"
@@ -24,8 +24,8 @@ export default function Page() {
           <p>
             Speech in, speech out, with no server: voice detection, speech recognition, a language model and speech
             synthesis all run on the device. The hard part is not any one model but the wait between the end of your
-            question and the first word of the answer. Below, a smaller version of the same loop runs in your browser
-            and times every stage.
+            question and the first word of the answer. Below, one spoken turn is replayed stage by stage with the
+            app&apos;s measured timings; change how it behaves and watch the first word move.
           </p>
         }
         stats={[
@@ -37,12 +37,17 @@ export default function Page() {
       />
 
       <Section title="Try it" id="try">
-        <VoiceDemo />
+        <VoiceExplainer />
         <p className="prose" style={{ fontSize: 14 }}>
-          Ask anything, out loud or typed. The chart under the conversation shows where the time went for the last
-          answer. Untick &ldquo;speak sentence by sentence&rdquo; and ask again to hear the difference streaming makes;
-          while it is talking, start speaking to interrupt it.
+          Press Ask, then untick &ldquo;speak sentence by sentence&rdquo; and ask again to see what streaming buys.
+          Tick &ldquo;slow model&rdquo; to see the filler phrase cover a late answer, and press &ldquo;talk over
+          it&rdquo; while it speaks. Stage times are the app&apos;s measurements; the replies are examples written for
+          this page.
         </p>
+      </Section>
+
+      <Section title="The sentence splitter" id="splitter">
+        <SplitterPlay />
       </Section>
 
       <Section title="How it works" id="how">
@@ -82,9 +87,8 @@ export default function Page() {
           ]}
         />
         <p className="prose" style={{ fontSize: 14 }}>
-          Measured on an RTX 3050 laptop with Llama 3.2 3B in Ollama. The browser version swaps in smaller models so
-          it can download into a tab: Whisper tiny, SmolLM2 and your browser&apos;s built-in voice instead of Piper.
-          Its answers are simpler; the pipeline and its timing rules are the same.{" "}
+          Measured on an RTX 3050 laptop with Llama 3.2 3B in Ollama, faster-whisper and Piper, with nothing sent over
+          the network.{" "}
           <a href={REPO} target="_blank" rel="noreferrer">
             Code on GitHub
           </a>

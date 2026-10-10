@@ -71,7 +71,7 @@ export const featured: Project[] = [
     ],
     facts: [{ label: "Time to first word", value: "~1.5 s on CPU" }],
     repo: gh("voice_ai"),
-    demo: { label: "Talk to it in your browser", href: "/projects/voice-assistant" },
+    demo: { label: "See how it answers", href: "/projects/voice-assistant" },
   },
   {
     slug: "gene-anomaly",
