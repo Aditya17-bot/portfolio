@@ -106,6 +106,7 @@ export const more: Project[] = [
     stack: ["FastAPI", "React", "scikit-learn", "MediaPipe", "WebSockets"],
     points: [],
     repo: gh("caterpillar"),
+    demo: { label: "Drive the simulated cab", href: "/projects/caterpillar" },
   },
   {
     slug: "fraud",

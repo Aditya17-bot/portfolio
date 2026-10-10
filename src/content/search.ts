@@ -34,6 +34,7 @@ export function searchIndex(): SearchItem[] {
       })),
     { id: "demo-blindassist", group: "Projects", title: "BlindAssist demo", hint: "Both detectors and the decision rules on your camera or photos", href: "/projects/blindassist", keywords: "blind assist yolo camera webcam obstacle door" },
     { id: "demo-gene", group: "Projects", title: "Protein impact explorer", hint: "A gene's AlphaFold structure coloured by AlphaMissense, live", href: "/projects/gene-anomaly", keywords: "gene protein alphafold alphamissense mutation 3d hackathon" },
+    { id: "demo-operator", group: "Projects", title: "Operator cab simulator", hint: "Safety rules, overheat forecast and speed advisor on a machine you drive", href: "/projects/caterpillar", keywords: "excavator caterpillar safety seatbelt overheat machine operator" },
     { id: "study-fraud", group: "Projects", title: "Fraud alert budget", hint: "Random forest vs isolation forest, interactive", href: "/projects/fraud", keywords: "fraud detection card transactions sparkov threshold precision recall" },
     ...[...featured, ...more].map((p) => ({
       id: `project-${p.slug}`,

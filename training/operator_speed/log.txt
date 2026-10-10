@@ -1,0 +1,2 @@
+rows 5,000; hold-out R^2 0.9882, MAE 0.469 km/h
+wrote C:\adi\portfolio\site\public\projects\operator\speed_model.json (227 KB), max export diff 0.00e+00
