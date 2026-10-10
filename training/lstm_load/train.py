@@ -49,6 +49,7 @@ CONFIG = {
     "lr": 2e-3,
     "origin_stride_train": 3,
     "max_interp_steps": 12,
+    "max_jump": 0.08,
     "test_from": "2024-01-01",
     "seed": 0,
     "demo_days": 24,
@@ -92,6 +93,16 @@ def load(cfg):
             w = (np.arange(a + 1, b) - a) / (b - a)
             raw[a + 1 : b] = raw[a] * (1 - w)[:, None] + raw[b] * w[:, None]
             valid[a + 1 : b] = True
+    # Some days in the file carry another day's load (a March day with a summer profile), which shows up
+    # as an impossible jump at midnight. Break the series at any change between neighbouring readings
+    # above max_jump * sqrt(steps apart): windows that cross the break are skipped like a long gap.
+    a, b = pos[:-1], pos[1:]
+    rel = np.abs(raw[b, 0] - raw[a, 0]) / np.maximum(raw[a, 0], 1.0)
+    jumps = (b - a <= cfg["max_interp_steps"] + 1) & (rel > cfg["max_jump"] * np.sqrt(b - a))
+    for i, j in zip(a[jumps], b[jumps]):
+        valid[i + 1 : j + 1] = False
+    zero = known & (raw[:, 0] <= 0)
+    valid[zero] = False
     raw = np.nan_to_num(raw)
     hours = (grid % 86400) / 3600
     dow = ((grid // 86400 + 3) % 7).astype(np.float64)  # Monday = 0; 1970-01-01 was a Thursday
