@@ -100,7 +100,10 @@ export default function Page() {
           </p>
           <p>
             <strong>Data handling.</strong> The data is put on a full five-minute grid. Gaps of up to an hour are
-            interpolated; any window that touches a longer gap is skipped. Training uses 2021 to 2023 (
+            interpolated; any window that touches a longer gap is skipped. Some days in the file carry another
+            day&apos;s load (a March day with a summer profile), which shows up as an impossible jump at midnight,
+            so any change between neighbouring readings above {100 * c.max_jump}% (scaled by the square root of
+            the steps between them) also breaks the series. Training uses 2021 to 2023 (
             {r.train_origins.toLocaleString("en-US")} windows, one every 15 minutes), testing all of 2024 up to the
             end of the data.
           </p>

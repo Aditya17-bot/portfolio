@@ -8,6 +8,7 @@ export type Paper = {
   status: string;
   summary: string[];
   facts: { label: string; value: string }[];
+  explore?: { label: string; href: string };
 };
 
 export type Patent = {
@@ -39,6 +40,7 @@ export const papers: Paper[] = [
       { label: "Best MAPE", value: "0.77%" },
       { label: "Best R²", value: "0.9977" },
     ],
+    explore: { label: "Rerun on public data: try it", href: "/research/solar-forecasting" },
   },
 ];
 

@@ -14,11 +14,18 @@ Every model was trained by the script in its folder, exported to ONNX, and runs 
 | ResNet-56 (vs plain-56) | CIFAR-10 | 853,018 | 91.70% (plain-56: 81.90%) | `training/resnet_cifar10` |
 | VAE, 2-D latent | MNIST | 1,068,820 | test ELBO -137.02 nats | `training/vae_mnist` |
 | DCGAN | MNIST | 546,177 | class entropy 3.30 / 3.32 bits | `training/dcgan_mnist` |
-| LSTM forecaster | Delhi 5-min load | 204,300 | 1.40% MAPE, 1 h ahead, 2024 | `training/lstm_load` |
+| LSTM forecaster | Delhi 5-min load | 204,300 | 1.06% MAPE, 1 h ahead, 2024 | `training/lstm_load` |
 | Mini-GPT | Tiny Shakespeare | 818,048 | 2.11 bits/char validation | `training/mini_gpt` |
 | ViT-Tiny | CIFAR-10 | 1,806,538 | 82.68% test accuracy | `training/vit_cifar10` |
 
 Train any of them with `.venv/Scripts/python training/<folder>/train.py` (PyTorch, NumPy, onnx, onnxruntime). Data is downloaded and checksummed by the scripts, except the Delhi load data, which comes from Kaggle (see `training/lstm_load/train.py`).
+
+Two interactive studies use scikit-learn and LightGBM on CPU:
+
+| Study | Data | Result | Code |
+|---|---|---|---|
+| Fraud alert budget (`/projects/fraud`) | Sparkov simulated card transactions | random forest PR-AUC 0.954 on the last 6 months | `training/fraud_sparkov` |
+| Solar-aware forecasting (`/research/solar-forecasting`) | Delhi 5-min load, same windows as the LSTM | LightGBM 0.87% MAPE vs LSTM 1.06%; sun features help only the linear model | `training/solar_forecast` |
 
 ## Develop
 

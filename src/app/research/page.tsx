@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
 import { papers, patents, patentSearch } from "@/content/research";
 import styles from "../content.module.css";
@@ -53,6 +54,11 @@ export default function Page() {
                   </div>
                 ))}
               </dl>
+              {p.explore ? (
+                <p className={styles.links}>
+                  <Link href={p.explore.href}>{p.explore.label}</Link>
+                </p>
+              ) : null}
             </article>
           ))}
         </section>
