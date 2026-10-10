@@ -1,3 +1,4 @@
+import { models } from "../src/content/models";
 import { readFileSync } from "node:fs";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
@@ -87,10 +88,12 @@ test("drawing in the hero runs the network", async ({ page }) => {
   await expect(chapter.getByTestId("prediction")).toHaveText("1");
 });
 
-test("models index links the live model and marks the rest planned", async ({ page }) => {
+test("models index links every live model and marks the rest planned", async ({ page }) => {
   await page.goto("/models");
+  for (const m of models) {
+    if (m.status === "live") await expect(page.locator(`a[href="/models/${m.slug}"]`)).toHaveCount(1);
+  }
+  await expect(page.locator("[aria-disabled]")).toHaveCount(models.filter((m) => m.status === "planned").length);
   await page.getByRole("link", { name: /MLP in NumPy/ }).click();
   await expect(page).toHaveURL(/\/models\/mlp-numpy$/);
-  await page.goto("/models");
-  await expect(page.locator("[aria-disabled]").first()).toContainText("Planned");
 });

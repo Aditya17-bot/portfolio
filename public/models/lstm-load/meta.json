@@ -1,0 +1,96 @@
+{
+ "name": "LSTM forecaster",
+ "params": 204300,
+ "features": [
+  "load_mw",
+  "temp_c",
+  "rhum_pct",
+  "hour_sin",
+  "hour_cos",
+  "dow_sin",
+  "dow_cos",
+  "sun_elevation_sin"
+ ],
+ "config": {
+  "context": 288,
+  "horizon": 12,
+  "hidden": 128,
+  "layers": 2,
+  "epochs": 12,
+  "batch_size": 512,
+  "lr": 0.002,
+  "origin_stride_train": 3,
+  "max_interp_steps": 12,
+  "test_from": "2024-01-01",
+  "seed": 0,
+  "demo_days": 24
+ },
+ "results": {
+  "test_mape": 1.4037,
+  "test_mae_mw": 65.125,
+  "test_mape_by_horizon": [
+   0.7451,
+   0.8706,
+   1.0132,
+   1.1169,
+   1.23,
+   1.3435,
+   1.473,
+   1.5596,
+   1.6758,
+   1.8212,
+   1.9276,
+   2.0678
+  ],
+  "persistence_mape": 3.04,
+  "yesterday_mape": 11.1578,
+  "test_origins": 4088,
+  "train_origins": 84853,
+  "train_seconds": 263.4,
+  "onnx_max_abs_diff_mw": 0.10986328125,
+  "onnx_max_rel_diff": 3.338919850648381e-05
+ },
+ "demo": {
+  "dates": [
+   "2024-01-06",
+   "2024-01-12",
+   "2024-02-12",
+   "2024-03-07",
+   "2024-03-28",
+   "2024-04-14",
+   "2024-04-29",
+   "2024-05-14",
+   "2024-05-25",
+   "2024-05-30",
+   "2024-06-15",
+   "2024-06-20",
+   "2024-06-25",
+   "2024-06-30",
+   "2024-07-08",
+   "2024-07-16",
+   "2024-07-20",
+   "2024-07-31",
+   "2024-08-07",
+   "2024-08-18",
+   "2024-09-09",
+   "2024-10-29",
+   "2024-11-16",
+   "2024-12-08"
+  ],
+  "steps_per_day": 288
+ },
+ "data": {
+  "name": "Delhi 5-Minute Electricity Demand for Forecasting",
+  "url": "https://www.kaggle.com/datasets/yug201/delhi-5-minute-electricity-demand-for-forecasting",
+  "license": "CC BY 4.0",
+  "range": [
+   "2021-01-01",
+   "2024-12-12"
+  ]
+ },
+ "source": "training/lstm_load/log.csv",
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "5bc2591",
+ "command": "python training/lstm_load/train.py",
+ "onnx_bytes": 822412
+}

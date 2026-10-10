@@ -48,6 +48,12 @@ const lessons = [
     question: "How can a model learn to draw digits without ever being told what a good drawing is?",
   },
   {
+    slug: "lstm-load",
+    anchor: "how",
+    idea: "Sequences and memory",
+    question: "How does a network read 288 time steps in order and carry what matters to the end?",
+  },
+  {
     slug: "mini-gpt",
     anchor: "how",
     idea: "Attention",

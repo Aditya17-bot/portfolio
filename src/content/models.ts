@@ -66,7 +66,15 @@ export const models: ModelEntry[] = [
     status: "live",
     date: "Oct 2026",
   },
-  { slug: "lstm-load", title: "LSTM forecaster", family: "Recurrent", dataset: "Delhi load", summary: "A sequence model for electricity demand, the problem from my forecasting paper.", status: "planned" },
+  {
+    slug: "lstm-load",
+    title: "LSTM forecaster",
+    family: "Recurrent",
+    dataset: "Delhi load",
+    summary: "Delhi's electricity demand an hour ahead from the last 24 hours, weather and the sun's position. Pick any day of 2024.",
+    status: "live",
+    date: "Oct 2026",
+  },
   {
     slug: "mini-gpt",
     title: "Mini-GPT",
