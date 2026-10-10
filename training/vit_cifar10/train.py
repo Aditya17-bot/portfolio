@@ -73,7 +73,7 @@ class ViT(nn.Module):
 
     def forward(self, x, cam=False):
         x = self.embed(C.normalise(x)).flatten(2).transpose(1, 2)
-        x = torch.cat([self.cls.expand(len(x), -1, -1), x], 1) + self.pos
+        x = torch.cat([self.cls.expand(x.shape[0], -1, -1), x], 1) + self.pos
         maps = []
         for b in self.blocks:
             x, a = b(x)
@@ -114,7 +114,15 @@ def main():
 
     net = ViT(cfg).to(dev)
     params = sum(p.numel() for p in net.parameters())
-    rows = C.fit(net, (xtr, ytr, xte, yte), cfg, HERE / "log.csv")
+    if "--export-only" in sys.argv:
+        # Re-export a finished run from its checkpoint and log, without training again.
+        import csv
+
+        net.load_state_dict(torch.load(HERE / "model.pt", map_location=dev))
+        with open(HERE / "log.csv") as f:
+            rows = [{k: float(v) for k, v in r.items()} for r in csv.DictReader(f)]
+    else:
+        rows = C.fit(net, (xtr, ytr, xte, yte), cfg, HERE / "log.csv")
 
     OUT.mkdir(parents=True, exist_ok=True)
     net = net.float().cpu().eval()
