@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { latestRunner, loadSession, tensor } from "@/lib/ort";
+import { latestRunner, loadSession, runSerial, tensor } from "@/lib/ort";
 import { DrawPad } from "./DrawPad";
 import styles from "./LatentExplorer.module.css";
 
@@ -21,14 +21,14 @@ type Z = [number, number];
 
 async function decode(z: Z) {
   const s = await loadSession(DECODER);
-  const res = await s.run({ z: await tensor(new Float32Array(z), [1, 2]) });
+  const res = await runSerial(s, { z: await tensor(new Float32Array(z), [1, 2]) });
   return res.image.data as Float32Array;
 }
 
 async function encode(x: Float32Array | null): Promise<Z | null> {
   if (!x) return null;
   const s = await loadSession(ENCODER);
-  const res = await s.run({ image: await tensor(x, [1, 1, 28, 28]) });
+  const res = await runSerial(s, { image: await tensor(x, [1, 1, 28, 28]) });
   const mu = res.mu.data as Float32Array;
   return [mu[0], mu[1]];
 }
@@ -120,7 +120,7 @@ export function LatentExplorer() {
           zs.set([a, b], (r * GRID + c) * 2);
         }
       const s = await loadSession(DECODER);
-      const res = await s.run({ z: await tensor(zs, [GRID * GRID, 2]) });
+      const res = await runSerial(s, { z: await tensor(zs, [GRID * GRID, 2]) });
       if (cancelled) return;
       const px = res.image.data as Float32Array;
       for (let k = 0; k < GRID * GRID; k++) paintDigit(grid.current, px, k * 784, (k % GRID) * 28, Math.floor(k / GRID) * 28);

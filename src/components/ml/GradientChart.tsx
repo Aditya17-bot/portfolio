@@ -13,8 +13,8 @@ export function GradientChart({
   title: string;
   caption?: string;
 }) {
-  const W = 560;
-  const H = 240;
+  const W = 900;
+  const H = 320;
   const pad = { l: 52, r: 16, t: 14, b: 34 };
   const layers = Math.max(...series.map((s) => data[s.key].length));
   const logs = series.flatMap((s) => data[s.key].map(Math.log10));

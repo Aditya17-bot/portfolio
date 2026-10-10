@@ -1,0 +1,45 @@
+{
+ "name": "Mini-GPT",
+ "params": 818048,
+ "vocab": "\n !$&',-.3:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+ "config": {
+  "context": 128,
+  "layers": 4,
+  "heads": 4,
+  "width": 128,
+  "dropout": 0.1,
+  "batch_size": 64,
+  "steps": 6000,
+  "lr": 0.002,
+  "warmup": 200,
+  "weight_decay": 0.1,
+  "eval_every": 250,
+  "eval_batches": 40,
+  "val_fraction": 0.1,
+  "seed": 0
+ },
+ "results": {
+  "val_loss": 1.4654,
+  "val_bits_per_char": 2.1141,
+  "train_loss_last_eval": 1.1702,
+  "unigram_val_loss": 3.3473,
+  "bigram_val_loss": 2.4819,
+  "train_seconds": 167.4,
+  "onnx_max_abs_diff": 9.179115295410156e-06
+ },
+ "data": {
+  "chars": 1115394,
+  "train_chars": 1003854,
+  "val_chars": 111540
+ },
+ "sample": {
+  "prompt": "ROMEO:\n",
+  "temperature": 0.8,
+  "text": "ROMEO:\nPeace, sir.\n\nAUFIDIUS:\nSirs; let them thee discontinual lord.\n\nMERCUTIO:\nWhat, my lord? Just order? have we an arch, I am the\nthat none sound that we are discontented without thy presence?\n\nCLARENCE:\nI think thee that with all grave the sovereign.\n\nQUEEN ELIZABETH:\nNay that your household in no friend soulship the reasons\nThat his action and part your clouds, for this happy\nMay breathe to the quee"
+ },
+ "source": "training/mini_gpt/log.csv",
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "534648f",
+ "command": "python training/mini_gpt/train.py",
+ "onnx_bytes": 3423517
+}

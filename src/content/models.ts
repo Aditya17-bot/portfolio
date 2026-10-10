@@ -45,7 +45,7 @@ export const models: ModelEntry[] = [
     family: "Residual network",
     dataset: "CIFAR-10",
     summary: "Plain and residual nets at 20 and 56 layers, same recipe: why skip connections make depth trainable, measured.",
-    status: "planned",
+    status: "live",
     date: "Oct 2026",
   },
   {
@@ -58,8 +58,16 @@ export const models: ModelEntry[] = [
     date: "Oct 2026",
   },
   { slug: "dcgan", title: "DCGAN", family: "Generative", dataset: "MNIST", summary: "Two networks trained against each other.", status: "planned" },
-  { slug: "lstm-load", title: "LSTM forecaster", family: "Recurrent", dataset: "Delhi load", summary: "Sequence model on the data from my forecasting paper.", status: "planned" },
-  { slug: "mini-gpt", title: "Mini-GPT", family: "Transformer", dataset: "Text", summary: "A character-level transformer with attention you can inspect.", status: "planned" },
+  { slug: "lstm-load", title: "LSTM forecaster", family: "Recurrent", dataset: "Delhi load", summary: "A sequence model for electricity demand, the problem from my forecasting paper.", status: "planned" },
+  {
+    slug: "mini-gpt",
+    title: "Mini-GPT",
+    family: "Transformer",
+    dataset: "Shakespeare",
+    summary: "A character-level transformer that writes in your browser. Click any character to see what each attention head looked at.",
+    status: "live",
+    date: "Oct 2026",
+  },
   { slug: "vit-tiny", title: "ViT-Tiny", family: "Vision transformer", dataset: "CIFAR-10", summary: "Attention instead of convolution, next to the ResNet.", status: "planned" },
 ];
 

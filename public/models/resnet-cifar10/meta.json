@@ -1,0 +1,33 @@
+{
+ "name": "ResNet-56",
+ "classes": [
+  "airplane",
+  "automobile",
+  "bird",
+  "cat",
+  "deer",
+  "dog",
+  "frog",
+  "horse",
+  "ship",
+  "truck"
+ ],
+ "config": {
+  "epochs": 50,
+  "batch_size": 128,
+  "max_lr": 0.1,
+  "weight_decay": 0.0001,
+  "seed": 0
+ },
+ "runs": [
+  "plain-20",
+  "plain-56",
+  "resnet-20",
+  "resnet-56"
+ ],
+ "onnx_test_acc": 0.9178,
+ "onnx_bytes": 3439912,
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "46cf39a",
+ "command": "python training/resnet_cifar10/train.py"
+}

@@ -10,13 +10,3 @@ export function PageIntro({ eyebrow, title, children }: { eyebrow: string; title
     </header>
   );
 }
-
-export function ComingSoon({ what }: { what: string }) {
-  return (
-    <div className="container">
-      <p className={styles.soon}>
-        <span className={styles.dot} aria-hidden="true" /> {what} — being built.
-      </p>
-    </div>
-  );
-}

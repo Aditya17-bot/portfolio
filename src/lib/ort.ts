@@ -57,3 +57,17 @@ export function latestRunner<I, O>(run: (input: I) => Promise<O>, onResult: (out
     if (!busy) void pump();
   };
 }
+
+const queues = new WeakMap<InferenceSession, Promise<unknown>>();
+
+/** Run on a session after any call already queued on it; a session rejects concurrent runs. */
+export function runSerial(
+  session: InferenceSession,
+  feeds: InferenceSession.FeedsType,
+  fetches?: string[],
+): Promise<InferenceSession.ReturnType> {
+  const prev = queues.get(session) ?? Promise.resolve();
+  const next = prev.catch(() => {}).then(() => (fetches ? session.run(feeds, fetches) : session.run(feeds)));
+  queues.set(session, next);
+  return next;
+}

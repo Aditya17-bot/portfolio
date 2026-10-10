@@ -44,3 +44,14 @@ test("about has contact links", async ({ page }) => {
   await expect(contact.locator('a[href*="github.com"]')).toHaveCount(1);
   await expect(contact.locator('a[href*="linkedin.com"]')).toHaveCount(1);
 });
+
+test("learn links each idea to a live model page section", async ({ page }) => {
+  await page.goto("/learn");
+  const lessons = page.getByTestId("lesson");
+  expect(await lessons.count()).toBeGreaterThanOrEqual(5);
+  const first = lessons.first().getByRole("link");
+  await expect(first).toHaveAttribute("href", "/models/mlp-numpy#how");
+  await first.click();
+  await expect(page).toHaveURL(/\/models\/mlp-numpy#how$/);
+  await expect(page.locator("#how")).toBeInViewport();
+});

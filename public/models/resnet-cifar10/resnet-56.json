@@ -1,0 +1,13 @@
+{
+ "name": "resnet-56",
+ "depth": 56,
+ "residual": true,
+ "params": 853018,
+ "test_acc": 0.917,
+ "train_acc": 0.99398,
+ "test_loss": 0.33203,
+ "train_loss": 0.02211,
+ "best_test_acc": 0.9183,
+ "train_seconds": 852.3,
+ "source": "training/resnet_cifar10/resnet-56.csv"
+}

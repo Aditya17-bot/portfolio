@@ -1,0 +1,13 @@
+{
+ "name": "resnet-20",
+ "depth": 20,
+ "residual": true,
+ "params": 269722,
+ "test_acc": 0.9012,
+ "train_acc": 0.97398,
+ "test_loss": 0.34987,
+ "train_loss": 0.07806,
+ "best_test_acc": 0.9025,
+ "train_seconds": 316.0,
+ "source": "training/resnet_cifar10/resnet-20.csv"
+}

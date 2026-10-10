@@ -1,0 +1,13 @@
+{
+ "name": "plain-20",
+ "depth": 20,
+ "residual": false,
+ "params": 269722,
+ "test_acc": 0.8947,
+ "train_acc": 0.9612,
+ "test_loss": 0.36766,
+ "train_loss": 0.11355,
+ "best_test_acc": 0.8954,
+ "train_seconds": 286.6,
+ "source": "training/resnet_cifar10/plain-20.csv"
+}

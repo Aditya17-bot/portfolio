@@ -34,6 +34,7 @@ export function TrainingChart({
   lo -= span * 0.06;
   hi += span * 0.06;
   if (max !== undefined) hi = Math.min(hi, max);
+  if (Math.min(...values) >= 0) lo = Math.max(lo, 0);
   const x = (e: number) => pad.l + ((e - xs[0]) / (xs[xs.length - 1] - xs[0] || 1)) * (W - pad.l - pad.r);
   const y = (v: number) => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => lo + f * (hi - lo));

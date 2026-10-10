@@ -59,7 +59,9 @@ test.describe("VAE page", () => {
     await root.getByRole("button", { name: "Decoded grid" }).click();
     const grid = root.locator("canvas[width='336']");
     await expect(grid).toBeVisible();
-    await expect.poll(async () => (await pixels(grid)).filter((v, i) => i % 4 === 0 && v > 128).length).toBeGreaterThan(2000);
+    await expect
+      .poll(async () => (await pixels(grid)).filter((v, i) => i % 4 === 0 && v > 128).length, { timeout: 15_000 })
+      .toBeGreaterThan(2000);
   });
 
   test("results match the training log", async ({ page }) => {
