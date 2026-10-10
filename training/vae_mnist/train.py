@@ -150,8 +150,8 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     enc, dec = enc.cpu().eval(), dec.cpu().eval()
     for name, mod, arg, inp, out in [
-        ("encoder", MuOnly(enc), torch.zeros(1, 1, 28, 28), "image", "mu"),
-        ("decoder", Pixels(dec), torch.zeros(1, cfg["latent"]), "z", "image"),
+        ("encoder", MuOnly(enc).eval(), torch.zeros(1, 1, 28, 28), "image", "mu"),
+        ("decoder", Pixels(dec).eval(), torch.zeros(1, cfg["latent"]), "z", "image"),
     ]:
         torch.onnx.export(
             mod, arg, str(OUT / f"{name}.onnx"), input_names=[inp], output_names=[out],

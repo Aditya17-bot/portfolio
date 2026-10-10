@@ -234,9 +234,12 @@ def main():
 
     OUT.mkdir(parents=True, exist_ok=True)
     net = net.float().cpu().eval()
+    torch.save(net.state_dict(), HERE / "model.pt")
     onnx_path = OUT / "model.onnx"
+    # export() restores the wrapper's training flag afterwards; build it in eval mode so the
+    # reference below runs without dropout.
     torch.onnx.export(
-        Exported(net),
+        Exported(net).eval(),
         torch.zeros(1, 16, dtype=torch.int64),
         str(onnx_path),
         input_names=["idx"],
