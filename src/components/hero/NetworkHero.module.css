@@ -1,0 +1,154 @@
+/* The hero is always drawn on a dark field, so its copy uses fixed light colours. */
+.hero {
+  position: relative;
+  margin-top: calc(-1 * var(--header-h));
+  background: #05070d;
+  color: #e6eaf2;
+  --hero-muted: #9aa4b8;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.stage canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.fallback {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 65% 45%, rgba(92, 225, 230, 0.16), transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(245, 165, 36, 0.08), transparent 45%),
+    #05070d;
+}
+
+/* Darkens the left edge so copy stays readable over the drawing. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(5, 7, 13, 0.92) 0%, rgba(5, 7, 13, 0.55) 38%, rgba(5, 7, 13, 0) 62%),
+    linear-gradient(0deg, #05070d 0%, rgba(5, 7, 13, 0) 18%);
+}
+
+.chapters {
+  position: relative;
+  margin-top: -100dvh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.chapter {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: var(--header-h) var(--gutter) 0;
+}
+
+.card {
+  max-width: 460px;
+  display: grid;
+  gap: 14px;
+  pointer-events: auto;
+  opacity: 0.25;
+  transform: translateY(12px);
+  transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+}
+
+.chapter[data-active] .card,
+.chapter:first-child:not([data-active]) .card:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+.layer {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5ce1e6;
+}
+
+.title {
+  font-size: clamp(40px, 6.4vw, 68px);
+  font-weight: 650;
+}
+
+.heading {
+  font-size: clamp(30px, 4.4vw, 44px);
+  font-weight: 650;
+}
+
+.body {
+  font-size: 17px;
+  color: var(--hero-muted);
+}
+
+.card [data-links] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.card [data-links] a {
+  padding: 8px 14px;
+  border: 1px solid rgba(92, 225, 230, 0.35);
+  border-radius: 999px;
+  font-size: 14px;
+  color: #e6eaf2;
+  background: rgba(11, 15, 26, 0.6);
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.card [data-links] a:hover {
+  border-color: #5ce1e6;
+  background: rgba(92, 225, 230, 0.1);
+}
+
+.hint {
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--hero-muted);
+  animation: bob 2.4s var(--ease) infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+/* Portrait: the drawing sits in the top half, copy in the bottom half. */
+@media (max-aspect-ratio: 1/1) {
+  .scrim {
+    background: linear-gradient(0deg, rgba(5, 7, 13, 0.95) 0%, rgba(5, 7, 13, 0.7) 38%, rgba(5, 7, 13, 0) 60%);
+  }
+
+  .chapter {
+    align-items: flex-end;
+    padding-bottom: 48px;
+  }
+
+  .body {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -56,11 +56,11 @@ test("theme toggle switches and persists across reload without flash", async ({ 
   await expect(html).toHaveAttribute("data-theme", "light");
 });
 
-test("home lists every section as a layer card", async ({ page }) => {
+test("home lists every section in the index", async ({ page }) => {
   await page.goto("/");
-  const cards = page.locator("ol li a");
+  const cards = page.locator("section[aria-labelledby=layers-title] ol li a");
   await expect(cards).toHaveCount(6);
-  await expect(page.getByTestId("hero-slot")).toBeVisible();
+  await expect(page.getByTestId("hero")).toBeVisible();
 });
 
 test("skip link moves focus to main content", async ({ page, isMobile }) => {

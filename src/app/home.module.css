@@ -1,30 +1,5 @@
-.hero {
-  padding-top: clamp(48px, 10vw, 112px);
-  padding-bottom: 48px;
-  display: grid;
-  gap: 18px;
-}
-
-.title {
-  font-size: clamp(40px, 7vw, 72px);
-  font-weight: 650;
-}
-
-.lede {
-  max-width: 60ch;
-  font-size: 18px;
-  color: var(--text-muted);
-}
-
-.heroSlot {
-  margin-top: 24px;
-  height: clamp(220px, 40vw, 420px);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background:
-    radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--activation) 12%, transparent), transparent 55%),
-    radial-gradient(circle at 75% 60%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 50%),
-    var(--surface);
+.indexSection {
+  padding-top: 64px;
 }
 
 .layers {
@@ -53,7 +28,7 @@
   transform: translateY(-2px);
 }
 
-.index {
+.indexSection {
   grid-row: span 2;
   font-family: var(--font-mono);
   font-size: 13px;
