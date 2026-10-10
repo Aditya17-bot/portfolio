@@ -46,7 +46,7 @@ export const papers: Paper[] = [
   {
     title:
       "Cross-Layer Selective Abstention for Reliable Offline Assistive Perception with Tool-Mediated Voice Interaction for Visually Impaired Users",
-    authors: "Aditya Sridhar, Vani Rajasekar, Yuvan Raj Mathan, Goureesankar S Nair",
+    authors: "Aditya Sridhar and co-authors",
     role: "First author",
     venue: "ICMLDE, conference paper",
     venueShort: "ICMLDE",

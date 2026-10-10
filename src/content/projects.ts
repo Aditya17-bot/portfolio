@@ -35,7 +35,7 @@ export const featured: Project[] = [
     ],
     repo: gh("object_detection_blind"),
     demo: { label: "Run it in your browser", href: "https://huggingface.co/spaces/aditya34587654/blindassist" },
-    team: "With Goureesankar S Nair and Yuvan Raj Mathan",
+    team: "Team project",
   },
   {
     slug: "amazon-ml-challenge",
@@ -55,7 +55,7 @@ export const featured: Project[] = [
       { label: "Held-out F0.5", value: "0.9855 (US/India)" },
     ],
     repo: gh("amazon-ml-challenge-2026-entity-resolution"),
-    team: "Team GiTWrech, VIT Vellore",
+    team: "Team project",
   },
   {
     slug: "voice-assistant",
@@ -82,7 +82,7 @@ export const featured: Project[] = [
       "Spatial proximity analysis: finds clusters of variants that are close in 3D even when they are far apart in sequence.",
     ],
     repo: gh("Gene-Anomaly-detection"),
-    team: "With Moinuddin Hasan, Aaditya Tripathi and Goureesankar S Nair",
+    team: "Team project",
   },
 ];
 
