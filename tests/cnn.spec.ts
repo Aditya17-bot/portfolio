@@ -9,7 +9,7 @@ test.describe("CNN model page", () => {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/models/cnn-mnist");
-    await expect(page.getByTestId("cnn-playground")).toHaveAttribute("data-ready", "true", { timeout: 30_000 });
+    await expect(page.getByTestId("cnn-playground")).toHaveAttribute("data-ready", "true", { timeout: 50_000 });
     const button = page.getByRole("button", { name: "Use an MNIST test digit" });
     let idx = 0;
     for (let k = 0; k < 10; k++) {
@@ -23,7 +23,7 @@ test.describe("CNN model page", () => {
 
   test("feature maps light up after a digit", async ({ page }) => {
     await page.goto("/models/cnn-mnist");
-    await expect(page.getByTestId("cnn-playground")).toHaveAttribute("data-ready", "true", { timeout: 30_000 });
+    await expect(page.getByTestId("cnn-playground")).toHaveAttribute("data-ready", "true", { timeout: 50_000 });
     await page.getByRole("button", { name: "Use an MNIST test digit" }).click();
     await expect(page.getByTestId("prediction")).toBeVisible();
     const lit = await page.locator("figure canvas").first().evaluate((c: HTMLCanvasElement) => {

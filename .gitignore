@@ -54,3 +54,6 @@ __pycache__/
 
 # copied from node_modules at build time
 /public/ort/
+
+.vercel
+.env*
