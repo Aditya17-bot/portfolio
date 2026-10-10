@@ -62,6 +62,7 @@ export default function Page() {
               { key: "test_acc", label: "test", tone: "b" },
             ]}
             format={(v) => `${(v * 100).toFixed(1)}%`}
+            max={1}
           />
           <TrainingChart
             title="Loss"

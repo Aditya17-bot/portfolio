@@ -9,11 +9,14 @@
     "lint": "eslint",
     "test": "playwright test",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run lint && npm run build && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run build && npm run test",
+    "prebuild": "node scripts/copy-ort.mjs",
+    "predev": "node scripts/copy-ort.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.1",
     "next": "16.4.0",
+    "onnxruntime-web": "^1.30.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "three": "^0.186.1"

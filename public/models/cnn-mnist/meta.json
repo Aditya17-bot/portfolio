@@ -1,0 +1,38 @@
+{
+ "name": "Small CNN",
+ "params": 7578,
+ "config": {
+  "epochs": 15,
+  "batch_size": 128,
+  "max_lr": 0.05,
+  "momentum": 0.9,
+  "weight_decay": 0.0005,
+  "rotate_deg": 10,
+  "translate": 0.1,
+  "seed": 1
+ },
+ "results": {
+  "test_acc": 0.9941,
+  "test_loss": 0.01995,
+  "train_acc": 0.99195,
+  "onnx_test_acc": 0.9941,
+  "train_seconds": 38.6
+ },
+ "source": "training/cnn_mnist/log.csv",
+ "hardware": "NVIDIA GeForce RTX 3050 Laptop GPU, PyTorch 2.6.0+cu124",
+ "commit": "eeb3064",
+ "command": "python training/cnn_mnist/train.py",
+ "onnx_bytes": 32758,
+ "taps": {
+  "conv1": [
+   8,
+   26,
+   26
+  ],
+  "conv4": [
+   16,
+   8,
+   8
+  ]
+ }
+}

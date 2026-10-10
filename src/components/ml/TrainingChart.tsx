@@ -10,12 +10,15 @@ export function TrainingChart({
   title,
   format = (v) => v.toFixed(3),
   caption,
+  max,
 }: {
   rows: LogRow[];
   series: Series[];
   title: string;
   format?: (v: number) => string;
   caption?: string;
+  /** Upper bound for the axis, e.g. 1 for accuracy. */
+  max?: number;
 }) {
   const W = 560;
   const H = 220;
@@ -27,6 +30,7 @@ export function TrainingChart({
   const span = hi - lo || 1;
   lo -= span * 0.06;
   hi += span * 0.06;
+  if (max !== undefined) hi = Math.min(hi, max);
   const x = (e: number) => pad.l + ((e - xs[0]) / (xs[xs.length - 1] - xs[0] || 1)) * (W - pad.l - pad.r);
   const y = (v: number) => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => lo + f * (hi - lo));

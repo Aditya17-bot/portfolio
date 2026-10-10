@@ -51,3 +51,6 @@ next-env.d.ts
 /training/**/runs/
 __pycache__/
 *.pt
+
+# copied from node_modules at build time
+/public/ort/

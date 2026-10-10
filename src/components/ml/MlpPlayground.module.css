@@ -72,6 +72,7 @@
 
 .note {
   color: var(--text-muted);
+  font-size: 13px;
 }
 
 @media (max-width: 560px) {
@@ -82,4 +83,19 @@
   .hero {
     grid-template-columns: 132px minmax(0, 1fr);
   }
+}
+
+.cnn {
+  display: grid;
+  gap: 16px;
+}
+
+.maps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
 }

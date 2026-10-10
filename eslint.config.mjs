@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Copied runtime and test output, not source.
+    "public/ort/**",
+    "test-results/**",
+    "playwright-report/**",
   ]),
 ]);
 
