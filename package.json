@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && npm run build && npm run test"
   },
   "dependencies": {
     "next": "16.4.0",
@@ -14,6 +17,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

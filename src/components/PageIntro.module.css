@@ -1,0 +1,37 @@
+.intro {
+  padding-top: clamp(48px, 9vw, 96px);
+  padding-bottom: 32px;
+  display: grid;
+  gap: 14px;
+}
+
+.title {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 650;
+}
+
+.lede {
+  max-width: 62ch;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 10px var(--signal);
+}

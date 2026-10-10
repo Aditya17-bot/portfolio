@@ -1,0 +1,71 @@
+.hero {
+  padding-top: clamp(48px, 10vw, 112px);
+  padding-bottom: 48px;
+  display: grid;
+  gap: 18px;
+}
+
+.title {
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 650;
+}
+
+.lede {
+  max-width: 60ch;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.heroSlot {
+  margin-top: 24px;
+  height: clamp(220px, 40vw, 420px);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--activation) 12%, transparent), transparent 55%),
+    radial-gradient(circle at 75% 60%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 50%),
+    var(--surface);
+}
+
+.layers {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 12px;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  height: 100%;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.layer:hover {
+  border-color: color-mix(in srgb, var(--activation) 55%, var(--border));
+  transform: translateY(-2px);
+}
+
+.index {
+  grid-row: span 2;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--activation);
+  padding-top: 2px;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.blurb {
+  font-size: 14px;
+  color: var(--text-muted);
+}

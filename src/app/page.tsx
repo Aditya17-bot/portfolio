@@ -1,69 +1,40 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { nav } from "@/content/site";
+import styles from "./home.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <section className={`container ${styles.hero}`} aria-labelledby="hero-title">
+        <p className="eyebrow">Aditya Sridhar · Machine learning</p>
+        <h1 id="hero-title" className={styles.title}>
+          Models you can run,
+          <br />
+          not just read about.
+        </h1>
+        <p className={styles.lede}>
+          I train neural networks from scratch and put them where you can push on them. Everything here runs in
+          your browser, and every number names the run it came from.
+        </p>
+        <div className={styles.heroSlot} data-testid="hero-slot" aria-hidden="true" />
+      </section>
+
+      <section className="container" aria-labelledby="layers-title">
+        <h2 id="layers-title" className="eyebrow">
+          Layers
+        </h2>
+        <ol className={styles.layers}>
+          {nav.map((item, i) => (
+            <li key={item.href}>
+              <Link href={item.href} className={styles.layer}>
+                <span className={styles.index}>L{i + 1}</span>
+                <span className={styles.label}>{item.label}</span>
+                <span className={styles.blurb}>{item.blurb}</span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </>
   );
 }
