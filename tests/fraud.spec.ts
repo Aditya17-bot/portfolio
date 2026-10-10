@@ -6,7 +6,7 @@ const data = JSON.parse(readFileSync("public/projects/fraud/curves.json", "utf8"
 test.describe("Fraud detection demo", () => {
   test("the projects list links to it", async ({ page }) => {
     await page.goto("/projects");
-    await page.locator("#fraud").getByRole("link", { name: "Try the alert budget" }).click();
+    await page.locator("#fraud").getByRole("link", { name: "Credit card fraud detection" }).click();
     await expect(page).toHaveURL(/\/projects\/fraud$/);
     await expect(page.getByTestId("fraud-explorer")).toBeVisible();
   });

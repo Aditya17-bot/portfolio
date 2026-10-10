@@ -1,0 +1,296 @@
+/* Thumbnails are drawn on a fixed dark panel in both themes, like the hero. */
+.glyph {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #070b14;
+  --c: #5ce1e6;
+  --a: #f5a524;
+  --hot: #ff5a4e;
+  --ink: #e6eaf2;
+  --mute: #4a5468;
+}
+
+.bgGrid {
+  fill: none;
+  stroke: rgba(230, 234, 242, 0.045);
+  stroke-width: 1;
+}
+
+.edge {
+  fill: none;
+  stroke: rgba(154, 164, 184, 0.28);
+  stroke-width: 1;
+}
+
+.hot {
+  stroke: var(--a);
+  stroke-opacity: 0.55;
+  stroke-width: 1.2;
+}
+
+.node {
+  fill: #070b14;
+  stroke: var(--c);
+  stroke-width: 2;
+}
+
+/* The one moving thing: a signal travelling along a path, only while the card is hovered or focused. */
+.pulse {
+  fill: none;
+  stroke: var(--a);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 10 300;
+  stroke-dashoffset: 310;
+  opacity: 0;
+}
+
+:global(.work-card):hover .pulse,
+:global(.work-card):focus-within .pulse {
+  opacity: 1;
+  animation: travel 1.4s linear infinite;
+}
+
+@keyframes travel {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.work-card):hover .pulse,
+  :global(.work-card):focus-within .pulse {
+    animation: none;
+    stroke-dasharray: none;
+    opacity: 0.8;
+  }
+}
+
+.ink {
+  fill: var(--ink);
+}
+
+.paper {
+  fill: rgba(230, 234, 242, 0.06);
+}
+
+.cell {
+  fill: var(--c);
+}
+
+.grey {
+  fill: #8a93a6;
+}
+
+.heat {
+  fill: var(--a);
+  opacity: 0.22;
+}
+
+.heatCore {
+  fill: var(--hot);
+  opacity: 0.35;
+}
+
+.frame {
+  fill: none;
+  stroke: rgba(230, 234, 242, 0.35);
+  stroke-width: 1.2;
+}
+
+.axis {
+  stroke: rgba(230, 234, 242, 0.2);
+}
+
+.greyLine,
+.cyanLine,
+.whiteLine,
+.amberLine,
+.amberDash {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.greyLine {
+  stroke: #6b7488;
+}
+
+.cyanLine {
+  stroke: var(--c);
+}
+
+.whiteLine {
+  stroke: var(--ink);
+  stroke-width: 1.8;
+}
+
+.amberLine {
+  stroke: var(--a);
+}
+
+.amberDash {
+  stroke: var(--a);
+  stroke-dasharray: 5 4;
+  stroke-width: 1.8;
+}
+
+.skip {
+  fill: none;
+  stroke: var(--c);
+  stroke-opacity: 0.5;
+  stroke-width: 1.2;
+}
+
+.dotGrey {
+  fill: #6b7488;
+  opacity: 0.7;
+}
+
+.dotCyan {
+  fill: var(--c);
+}
+
+.cursor {
+  fill: none;
+  stroke: var(--a);
+  stroke-width: 2;
+}
+
+.sun {
+  fill: var(--a);
+  opacity: 0.1;
+}
+
+.attn {
+  fill: var(--a);
+}
+
+.patchHot {
+  fill: var(--c);
+}
+
+.gridLine {
+  stroke: rgba(230, 234, 242, 0.22);
+  stroke-dasharray: 4 4;
+}
+
+.boxHot,
+.boxOk {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.boxHot {
+  stroke: var(--hot);
+}
+
+.boxOk {
+  stroke: #3ddc84;
+}
+
+.dotHot {
+  fill: var(--hot);
+  opacity: 0.85;
+}
+
+.dotCool {
+  fill: #5b8def;
+  opacity: 0.85;
+}
+
+.limit {
+  stroke: var(--hot);
+  stroke-dasharray: 4 4;
+}
+
+.ring,
+.ringWarn,
+.ringCrit {
+  fill: none;
+}
+
+.ring {
+  stroke: rgba(230, 234, 242, 0.18);
+}
+
+.ringWarn {
+  stroke: rgba(245, 165, 36, 0.6);
+}
+
+.ringCrit {
+  stroke: rgba(255, 90, 78, 0.8);
+}
+
+.machine {
+  fill: #f5c518;
+}
+
+.workerDot {
+  fill: var(--a);
+}
+
+.sweep {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2;
+  stroke-dasharray: 30 330;
+  opacity: 0.6;
+}
+
+.barA {
+  fill: rgba(92, 225, 230, 0.6);
+}
+
+.barB {
+  fill: #6b7488;
+}
+
+.barC {
+  fill: #5b8def;
+}
+
+.barD {
+  fill: var(--a);
+}
+
+.barE {
+  fill: #3ddc84;
+}
+
+.record {
+  fill: rgba(230, 234, 242, 0.05);
+  stroke: rgba(230, 234, 242, 0.3);
+}
+
+.textLine {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.textLineDim {
+  stroke: #8a93a6;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.decoy {
+  fill: none;
+  stroke: var(--hot);
+  stroke-dasharray: 4 4;
+  stroke-width: 1.6;
+}
+
+.label,
+.labelCyan {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: #8a93a6;
+}
+
+.labelCyan {
+  fill: var(--c);
+}
