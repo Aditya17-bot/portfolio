@@ -44,6 +44,7 @@
   display: block;
   width: 100%;
   height: 100%;
+  image-rendering: pixelated;
 }
 
 .row {
@@ -88,6 +89,31 @@
   margin: 0;
   display: grid;
   gap: 8px;
+}
+
+.frames {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.original {
+  display: grid;
+  gap: 6px;
+  width: 224px;
+  max-width: 100%;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.original img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
 .frame {
@@ -140,6 +166,11 @@
   max-width: 224px;
 }
 
+/* With the original photo beside it, the caption spans both images. */
+.frames:has(.original) + .caption {
+  max-width: 460px;
+}
+
 .toggle {
   display: flex;
   align-items: center;
@@ -170,5 +201,15 @@
 
   .frame {
     width: min(224px, 100%);
+  }
+
+  .frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+
+  .original,
+  .frames:has(.original) .frame {
+    width: 100%;
   }
 }

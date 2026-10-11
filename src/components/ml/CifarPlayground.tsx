@@ -9,7 +9,7 @@ const PIXELS = 3 * 32 * 32;
 const SHOWN = 12;
 
 type Out = { probs: Float32Array; cam: Float32Array; ms: number };
-type Input = { x: Float32Array; rgba: Uint8ClampedArray; label: number | null };
+type Input = { x: Float32Array; rgba: Uint8ClampedArray; label: number | null; photo?: string };
 
 async function loadSamples(url: string) {
   const res = await fetch(url);
@@ -47,12 +47,22 @@ async function fromFile(file: File): Promise<Pick<Input, "x" | "rgba">> {
   return { x, rgba };
 }
 
+/**
+ * Draw a 32x32 image as sharp square pixels. The canvas is sized to its on-screen size in device
+ * pixels and scaled with nearest-neighbour, so blocks stay crisp at any zoom or display scaling.
+ */
 function draw(canvas: HTMLCanvasElement | null, rgba: Uint8ClampedArray) {
   const g = canvas?.getContext("2d");
-  if (!g) return;
-  const img = g.createImageData(32, 32);
+  if (!canvas || !g) return;
+  const src = document.createElement("canvas");
+  src.width = src.height = 32;
+  const img = src.getContext("2d")!.createImageData(32, 32);
   img.data.set(rgba);
-  g.putImageData(img, 0, 0);
+  src.getContext("2d")!.putImageData(img, 0, 0);
+  const side = Math.max(32, Math.round(canvas.clientWidth * Math.min(window.devicePixelRatio || 1, 3)));
+  canvas.width = canvas.height = side;
+  g.imageSmoothingEnabled = false;
+  g.drawImage(src, 0, 0, side, side);
 }
 
 /**
@@ -114,6 +124,14 @@ export function CifarPlayground({
     if (input) draw(view.current, input.rgba);
   }, [input]);
 
+  // An uploaded photo is shown next to its 32x32 version; free its object URL when it is replaced.
+  useEffect(() => {
+    const url = input?.photo;
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [input?.photo]);
+
   // Class activation map of the predicted class: min-max scaled, upsampled bilinearly, amber ramp.
   useEffect(() => {
     const g = heat.current?.getContext("2d");
@@ -158,7 +176,7 @@ export function CifarPlayground({
   async function upload(file: File | undefined) {
     if (!file) return;
     try {
-      apply({ ...(await fromFile(file)), label: null });
+      apply({ ...(await fromFile(file)), label: null, photo: URL.createObjectURL(file) });
     } catch {
       setError(true);
     }
@@ -213,10 +231,20 @@ export function CifarPlayground({
 
       <div className={styles.result}>
         <figure className={styles.stage}>
-          <div className={styles.frame} data-empty={!input || undefined}>
-            <canvas ref={view} width={32} height={32} className={styles.image} />
-            <canvas ref={heat} width={128} height={128} className={styles.heat} hidden={!showCam} />
-            {!input ? <span className={styles.placeholder}>Pick an image</span> : null}
+          <div className={styles.frames}>
+            {input?.photo ? (
+              <div className={styles.original}>
+                {/* A local object URL of the visitor's own file: next/image cannot optimise it. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={input.photo} alt="Your photo, before shrinking" data-testid="cifar-original" />
+                <span>Your photo</span>
+              </div>
+            ) : null}
+            <div className={styles.frame} data-empty={!input || undefined}>
+              <canvas ref={view} width={32} height={32} className={styles.image} data-testid="cifar-view" />
+              <canvas ref={heat} width={128} height={128} className={styles.heat} hidden={!showCam} />
+              {!input ? <span className={styles.placeholder}>Pick an image</span> : null}
+            </div>
           </div>
           <figcaption className={styles.caption}>
             <label className={styles.toggle}>
@@ -228,9 +256,12 @@ export function CifarPlayground({
                 Label: {classes[input.label]}
                 {out ? (top === input.label ? " · correct" : " · wrong") : ""}
               </span>
-            ) : input ? (
-              <span>Your photo, shrunk to 32×32</span>
             ) : null}
+            <span data-testid="cifar-size">
+              {input?.photo
+                ? "Shrunk to 32×32 pixels, the size the model was trained on. That is all it sees."
+                : "32×32 pixels: the whole image, exactly as the model sees it."}
+            </span>
           </figcaption>
         </figure>
         <div className={styles.side}>

@@ -51,7 +51,29 @@ test.describe("CIFAR-10 CNN page", () => {
     await expect(root).toHaveAttribute("data-ready", "true", { timeout: 50_000 });
     await root.getByTestId("cifar-upload").setInputFiles("tests/fixtures/ship.png");
     await expect(root.getByTestId("prediction")).toHaveText("ship");
-    await expect(root).toContainText("Your photo, shrunk to 32×32");
+    // The original sits beside the 32x32 version the model gets.
+    await expect(root.getByTestId("cifar-original")).toBeVisible();
+    await expect(root.getByTestId("cifar-size")).toContainText("Shrunk to 32×32 pixels");
+  });
+
+  test("test images are drawn as sharp pixels at screen resolution", async ({ page }) => {
+    await page.goto("/models/cnn-cifar10");
+    const root = page.getByTestId("cifar-playground");
+    await expect(root).toHaveAttribute("data-ready", "true", { timeout: 50_000 });
+    await root.getByTestId("cifar-sample").first().click();
+    await expect(root.getByTestId("cifar-size")).toContainText("exactly as the model sees it");
+    const view = root.getByTestId("cifar-view");
+    // Backed by at least one device pixel per CSS pixel, not a stretched 32x32 bitmap.
+    const { backing, shown } = await view.evaluate((c: HTMLCanvasElement) => ({ backing: c.width, shown: c.clientWidth }));
+    expect(backing).toBeGreaterThanOrEqual(shown);
+    // Nearest-neighbour: a row inside one source pixel is one flat colour.
+    const flat = await view.evaluate((c: HTMLCanvasElement) => {
+      const cell = c.width / 32;
+      const row = c.getContext("2d")!.getImageData(Math.floor(cell * 10) + 1, Math.floor(cell * 10) + 1, Math.floor(cell) - 2, 1).data;
+      for (let i = 4; i < row.length; i += 4) if (row[i] !== row[0] || row[i + 1] !== row[1] || row[i + 2] !== row[2]) return false;
+      return true;
+    });
+    expect(flat).toBe(true);
   });
 
   test("results match the training log and the ONNX score", async ({ page }) => {
