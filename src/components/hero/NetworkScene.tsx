@@ -4,6 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import { drawnInput } from "@/lib/drawnInput";
+import { heroPass } from "@/lib/heroPass";
 import type { TrainedMlp } from "@/lib/mlp";
 import {
   ARCH,
@@ -52,6 +53,21 @@ function discTexture() {
   return tex;
 }
 
+function ringTexture() {
+  const size = 128;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const g = c.getContext("2d")!;
+  g.strokeStyle = "#fff";
+  g.lineWidth = 7;
+  g.beginPath();
+  g.arc(size / 2, size / 2, size / 2 - 8, 0, Math.PI * 2);
+  g.stroke();
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 function labelTexture(text: string) {
   const c = document.createElement("canvas");
   c.width = c.height = 64;
@@ -73,11 +89,11 @@ type Props = {
   model: TrainedMlp;
 };
 
-type Pass = { acts: Float32Array[]; pred: number };
+type Pass = { x: Float32Array; acts: Float32Array[]; pred: number };
 
 function runPass(weights: Weights, x: Float32Array): Pass {
   const acts = forward(weights, x);
-  return { acts: acts.map(normalise), pred: argmax(acts[acts.length - 1]) };
+  return { x, acts: acts.map(normalise), pred: argmax(acts[acts.length - 1]) };
 }
 
 // A drawing stays on the network this long after the last stroke.
@@ -117,6 +133,7 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
   );
 
   const disc = useMemo(() => discTexture(), []);
+  const ring = useMemo(() => ringTexture(), []);
   const labels = useMemo(() => Array.from({ length: 10 }, (_, d) => labelTexture(String(d))), []);
 
   // --- Geometry -----------------------------------------------------------------------
@@ -125,6 +142,16 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
   const edgeLines = useRef<THREE.LineSegments>(null);
   const pulses = useRef<THREE.Points<THREE.BufferGeometry<THREE.NormalOrGLBufferAttributes>>>(null);
   const labelSprites = useRef<(THREE.Sprite | null)[]>([]);
+  const marker = useRef<THREE.Sprite>(null);
+
+  // The readouts beside the copy ask for a frame when the visitor points at a neuron.
+  useEffect(() => {
+    heroPass.invalidate = invalidate;
+    return () => {
+      heroPass.invalidate = () => {};
+      heroPass.input = null;
+    };
+  }, [invalidate]);
 
   const { pointGeoms, edgeGeom, pulseGeom } = useMemo(() => {
     const pointGeoms = net.layout.slice(1).map((ly) => {
@@ -171,9 +198,10 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
       edgeGeom.dispose();
       pulseGeom.dispose();
       disc.dispose();
+      ring.dispose();
       labels.forEach((t) => t.dispose());
     },
-    [pointGeoms, edgeGeom, pulseGeom, disc, labels],
+    [pointGeoms, edgeGeom, pulseGeom, disc, ring, labels],
   );
 
   // --- Camera -------------------------------------------------------------------------
@@ -251,6 +279,24 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
     );
     const col = tmpColor.current;
 
+    // Share the pass with the flat readouts, so they show the same digit lit at the same moment.
+    if (heroPass.input !== pass.x) {
+      heroPass.input = pass.x;
+      heroPass.version++;
+    }
+    lit.forEach((v, l) => (heroPass.lit[l] = v));
+    const focus = heroPass.focus;
+    const mark = marker.current;
+    if (mark) {
+      mark.visible = !!focus;
+      if (focus) {
+        const p = net.layout[focus.layer].positions;
+        mark.position.set(p[focus.index * 3], p[focus.index * 3 + 1], p[focus.index * 3 + 2]);
+        const s = [0, 0.62, 0.68, 0.9][focus.layer] * (1 + (reducedMotion ? 0 : 0.08 * Math.sin(t * 5)));
+        mark.scale.set(s, s, 1);
+      }
+    }
+
     const mesh = inputMesh.current;
     if (mesh) {
       const a0 = pass.acts[0];
@@ -297,8 +343,16 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
         const mag = Math.abs(e.weight) / net.maxW;
         const travelling = phase > 0 && phase < 1 ? Math.sin(Math.PI * phase) : 0;
         const after = phase >= 1 ? 0.35 : 0;
-        const glow = (0.015 + mag * 0.035 + src * (travelling * 0.45 + after * 0.5) * mag) * fadeOut;
-        const base = e.weight >= 0 ? C_POS : C_NEG;
+        let glow = (0.015 + mag * 0.035 + src * (travelling * 0.45 + after * 0.5) * mag) * fadeOut;
+        let base = e.weight >= 0 ? C_POS : C_NEG;
+        // Connections into and out of the neuron the visitor is pointing at.
+        if (
+          focus &&
+          ((e.layer + 1 === focus.layer && e.dst === focus.index) || (e.layer === focus.layer && e.src === focus.index))
+        ) {
+          glow = 0.35 + mag * 0.5;
+          base = C_SIGNAL;
+        }
         eCol.setXYZ(k2 * 2, base.r * glow, base.g * glow, base.b * glow);
         eCol.setXYZ(k2 * 2 + 1, base.r * glow, base.g * glow, base.b * glow);
 
@@ -360,6 +414,10 @@ export function NetworkScene({ progress, reducedMotion, model }: Props) {
           toneMapped={false}
         />
       </points>
+
+      <sprite ref={marker} visible={false} renderOrder={2}>
+        <spriteMaterial map={ring} color={C_SIGNAL} transparent depthTest={false} depthWrite={false} toneMapped={false} />
+      </sprite>
 
       {labels.map((tex, d) => (
         <sprite

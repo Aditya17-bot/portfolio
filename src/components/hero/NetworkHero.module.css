@@ -158,6 +158,21 @@
   .body {
     font-size: 16px;
   }
+
+  /* Cards with a layer readout reach up into the drawing: a feathered backing keeps them legible. */
+  .card {
+    position: relative;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -28px -20px;
+    z-index: -1;
+    background: rgba(5, 7, 13, 0.8);
+    filter: blur(16px);
+    pointer-events: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

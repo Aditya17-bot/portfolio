@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { site } from "@/content/site";
 import { MlpPlayground } from "@/components/ml/MlpPlayground";
+import { LayerReadout } from "./LayerReadout";
 import meta from "../../../public/models/mlp/meta.json";
 
 const acc = (meta.results.test_acc * 100).toFixed(2);
@@ -57,6 +58,7 @@ export const chapters: Chapter[] = [
         names the run it came from, and each one runs in your browser.
       </p>
     ),
+    extra: <LayerReadout layer={1} />,
     links: [{ href: "/models", label: "Open the zoo" }],
   },
   {
@@ -69,6 +71,7 @@ export const chapters: Chapter[] = [
         under revision, two published patent applications and seven more filed.
       </p>
     ),
+    extra: <LayerReadout layer={2} />,
     links: [
       { href: "/projects", label: "Projects" },
       { href: "/research", label: "Research" },
@@ -84,6 +87,7 @@ export const chapters: Chapter[] = [
         test that keeps it fixed.
       </p>
     ),
+    extra: <LayerReadout layer={3} />,
     links: [{ href: "/open-source", label: "Contributions" }],
   },
   {

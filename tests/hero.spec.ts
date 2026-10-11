@@ -36,6 +36,32 @@ test.describe("neural network hero", () => {
     await expect(page).toHaveURL(/\/models$/);
   });
 
+  test("layer readouts follow the pass and name the neuron under the pointer", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto("/");
+    for (const [layer, tiles] of [
+      [1, 128],
+      [2, 64],
+      [3, 10],
+    ] as const) {
+      const readout = page.getByTestId(`readout-${layer}`);
+      await readout.scrollIntoViewIfNeeded();
+      const grid = readout.locator("canvas").first();
+      await expect(grid).toHaveAttribute("aria-label", new RegExp(`^${tiles} tiles`));
+      // The canvas is sized and painted once the model has loaded.
+      await expect.poll(() => grid.evaluate((c: HTMLCanvasElement) => c.height)).toBeGreaterThan(20);
+      await grid.focus();
+      // The first arrow press picks the first tile, the next one steps right.
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("ArrowRight");
+      await expect(readout.locator("figcaption")).toContainText(layer === 3 ? /Digit 1: \d+\.\d%/ : /Neuron 2 of/);
+    }
+    // The output readout's bars add up to one prediction.
+    await expect(page.getByTestId("readout-3").locator("li[data-top]")).toHaveCount(1);
+    expect(errors).toEqual([]);
+  });
+
   test("reduced motion shows every chapter fully", async ({ browser }) => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" });
     const page = await ctx.newPage();

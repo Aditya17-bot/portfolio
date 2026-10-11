@@ -175,3 +175,49 @@ export function meanActivations(weights: Weights, inputs: Float32Array[]): Float
   }
   return (sums ?? []).map((s) => s.map((v) => v / inputs.length));
 }
+
+/**
+ * Per-pixel contributions to every neuron of one layer (1 = first hidden, ARCH.length - 1 =
+ * output logits). With ReLU hidden layers the network is exactly linear for a fixed input:
+ * once it is known which neurons are on, each neuron's pre-activation is T·x + const. This
+ * returns T(p)·x(p) for every pixel p, so a map shows which pixels pushed the neuron up
+ * (positive) or held it down (negative) for this input.
+ */
+export function pixelContributions(weights: Weights, x: Float32Array, layer: number): Float32Array[] {
+  const acts = forward(weights, x);
+  const nPix = x.length;
+  const lit: number[] = [];
+  for (let p = 0; p < nPix; p++) if (x[p] > 0) lit.push(p);
+
+  // T[j] holds neuron j's template, restricted to the lit pixels.
+  let nIn = nPix;
+  let T: Float32Array[] = [];
+  for (let l = 0; l < layer; l++) {
+    const nOut = weights.b[l].length;
+    const w = weights.W[l];
+    const next: Float32Array[] = [];
+    for (let j = 0; j < nOut; j++) {
+      const row = new Float32Array(lit.length);
+      if (l === 0) {
+        for (let i = 0; i < lit.length; i++) row[i] = w[j * nIn + lit[i]];
+      } else {
+        const prev = acts[l];
+        for (let k = 0; k < nIn; k++) {
+          if (prev[k] <= 0) continue;
+          const wk = w[j * nIn + k];
+          const tk = T[k];
+          for (let i = 0; i < lit.length; i++) row[i] += wk * tk[i];
+        }
+      }
+      next.push(row);
+    }
+    T = next;
+    nIn = nOut;
+  }
+
+  return T.map((row) => {
+    const out = new Float32Array(nPix);
+    for (let i = 0; i < lit.length; i++) out[lit[i]] = row[i] * x[lit[i]];
+    return out;
+  });
+}
