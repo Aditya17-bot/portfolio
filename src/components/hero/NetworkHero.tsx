@@ -3,6 +3,8 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ChapterLinks, chapters } from "./chapters";
+import { HeroExhibits } from "./HeroExhibits";
+import { heroPass } from "@/lib/heroPass";
 import styles from "./NetworkHero.module.css";
 
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
@@ -63,6 +65,10 @@ export function NetworkHero() {
         }
       }
       progress.current = p;
+      heroPass.cards = chapterEls.current.flatMap((el) => {
+        const card = el?.firstElementChild;
+        return card ? [card.getBoundingClientRect()] : [];
+      });
       const active = Math.round(p);
       chapterEls.current.forEach((el, i) => el?.toggleAttribute("data-active", i === active));
     };
@@ -97,6 +103,7 @@ export function NetworkHero() {
           <div className={styles.fallback} data-testid="hero-fallback" />
         )}
         <div className={styles.scrim} aria-hidden="true" />
+        {webgl && !reducedMotion ? <HeroExhibits /> : null}
       </div>
 
       <div className={styles.chapters}>

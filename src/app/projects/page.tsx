@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
 import { WorkGrid, type WorkItem } from "@/components/work/WorkGrid";
-import fraud from "../../../public/projects/fraud/curves.json";
+import { PROJECT_CARDS as CARDS } from "@/content/headlines";
 import { featured, more, type Project } from "@/content/projects";
 import styles from "../content.module.css";
 
@@ -39,46 +39,6 @@ function Tags({ items }: { items: string[] }) {
     </ul>
   );
 }
-
-// Projects with an interactive page get an illustrated card; the headline numbers come from those pages.
-const CARDS: Record<string, { group: string; metric: WorkItem["metric"]; facts: string[]; status: string }> = {
-  blindassist: {
-    group: "Vision",
-    metric: { value: "100%", label: "direction accuracy, reviewed announcements" },
-    facts: ["YOLOv8 × 2", "Android", "21 ms/frame on GPU"],
-    status: "Runs in your browser",
-  },
-  "amazon-ml-challenge": {
-    group: "Data & ML",
-    metric: { value: "696", label: "rank of 89,000+" },
-    facts: ["macro F0.5 0.9839", "10M+ records"],
-    status: "Interactive walk-through",
-  },
-  "voice-assistant": {
-    group: "Speech",
-    metric: { value: "~1.3 s", label: "to the first spoken word" },
-    facts: ["Whisper", "Llama 3.2 3B", "Piper", "offline"],
-    status: "Interactive replay",
-  },
-  "gene-anomaly": {
-    group: "Data & ML",
-    metric: { value: "Best Project", label: "Code for Life, VIT" },
-    facts: ["AlphaFold", "AlphaMissense", "UniProt"],
-    status: "Live data",
-  },
-  caterpillar: {
-    group: "Systems",
-    metric: { value: "3 min", label: "overheat warning horizon" },
-    facts: ["FastAPI", "React", "4 ML models"],
-    status: "Interactive simulator",
-  },
-  fraud: {
-    group: "Data & ML",
-    metric: { value: fraud.models.random_forest.pr_auc.toFixed(3), label: "PR-AUC on unseen months" },
-    facts: [`${(fraud.data.test_rows / 1000).toFixed(0)}k test transactions`, "random forest vs isolation forest"],
-    status: "Interactive",
-  },
-};
 
 export default function Page() {
   const all = [...featured, ...more];

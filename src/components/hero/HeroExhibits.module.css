@@ -1,0 +1,111 @@
+/* Labels over the 3D network. The scene sets each one's transform, opacity and --fire. */
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.exhibit {
+  --fire: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: auto;
+  color: #e6eaf2;
+  will-change: transform, opacity;
+}
+
+/* A ring around the named neuron; it fills as the neuron fires. */
+.ring {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(92, 225, 230, calc(0.45 + 0.55 * var(--fire)));
+  box-shadow: 0 0 calc(4px + 14px * var(--fire)) rgba(92, 225, 230, calc(0.15 + 0.6 * var(--fire)));
+}
+
+.exhibit[data-layer="4"] .ring {
+  left: -14px;
+  top: -14px;
+  width: 28px;
+  height: 28px;
+}
+
+/* Leader line from the ring's edge to the tag, set by the scene. */
+.leader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--ll, 0px);
+  border-top: 1px solid rgba(92, 225, 230, 0.5);
+  transform-origin: 0 0;
+  transform: rotate(var(--la, 0rad)) translateX(var(--lr, 11px));
+}
+
+.tag {
+  position: absolute;
+  left: var(--tx, 26px);
+  top: var(--ty, -16px);
+  display: grid;
+  gap: 1px;
+  padding: 5px 9px 6px;
+  white-space: nowrap;
+  border-radius: 6px;
+  border: 1px solid rgba(92, 225, 230, calc(0.22 + 0.4 * var(--fire)));
+  background: rgba(5, 7, 13, 0.8);
+  backdrop-filter: blur(3px);
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.tag strong {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.tag span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.3;
+  color: #9aa4b8;
+}
+
+.exhibit:hover .tag,
+.exhibit:focus-visible .tag {
+  border-color: #f5a524;
+  background: rgba(5, 7, 13, 0.92);
+}
+
+.exhibit:hover .ring,
+.exhibit:focus-visible .ring {
+  border-color: #f5a524;
+}
+
+.exhibit:hover .leader,
+.exhibit:focus-visible .leader {
+  border-color: #f5a524;
+}
+
+.exhibit:focus-visible {
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .tag {
+    padding: 3px 7px 4px;
+  }
+
+  .tag strong {
+    font-size: 12px;
+  }
+
+  .tag span {
+    display: none;
+  }
+}

@@ -41,8 +41,8 @@ export const chapters: Chapter[] = [
     title: "Where it starts",
     body: (
       <p>
-        Computer Science and Engineering at VIT Vellore, graduating 2027. Every network starts the same way, with a
-        grid of numbers. Draw one below and watch it go through.
+        Computer Science and Engineering at VIT Vellore, graduating 2027. Every network starts with a grid of
+        numbers: 784 pixels. Right now this one is reading about me. Draw a digit below and it reads yours instead.
       </p>
     ),
     extra: <MlpPlayground variant="hero" linkHero />,

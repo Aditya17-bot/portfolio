@@ -62,6 +62,42 @@ test.describe("neural network hero", () => {
     expect(errors).toEqual([]);
   });
 
+  test("named neurons label the work at each layer and link to it", async ({ page, isMobile }) => {
+    // On phones the copy covers most of the drawing, so most labels stay hidden by design.
+    test.skip(isMobile, "labels are placed beside the copy on wide screens");
+    await page.goto("/");
+    await expect(page.locator("[data-testid=hero] canvas[data-engine]")).toBeVisible({ timeout: 20_000 });
+    for (const [chapter, id, href] of [
+      ["models", "resnet-cifar10", "/models/resnet-cifar10"],
+      ["work", "blindassist", "/projects/blindassist"],
+      ["open-source", "kornia/kornia", "/open-source#merged"],
+    ] as const) {
+      await page.locator(`[data-chapter="${chapter}"]`).evaluate((el) => el.scrollIntoView({ block: "center" }));
+      const label = page.locator(`[data-exhibit="${id}"]`);
+      // The link is a zero-size anchor point; its tag is what shows.
+      await expect(label).toHaveCSS("visibility", "visible");
+      await expect(label.locator("strong")).toBeVisible();
+      await expect(label).toHaveAttribute("href", href);
+    }
+    // Labels of other layers are hidden while the camera is away from them.
+    await expect(page.locator('[data-exhibit="resnet-cifar10"]')).toHaveCSS("visibility", "hidden");
+    // Clicking a tag opens its page. The camera eases into each stop, so wait for the tag to settle,
+    // then click where it is: nothing else (a card, the canvas) may sit on top of it.
+    const tag = page.locator('[data-exhibit="kornia/kornia"] strong');
+    let last = "";
+    await expect
+      .poll(async () => {
+        const box = JSON.stringify(await tag.boundingBox());
+        const settled = box === last;
+        last = box;
+        return settled;
+      }, { intervals: [250] })
+      .toBe(true);
+    const box = (await tag.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(page).toHaveURL(/\/open-source#merged$/);
+  });
+
   test("reduced motion shows every chapter fully", async ({ browser }) => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" });
     const page = await ctx.newPage();
