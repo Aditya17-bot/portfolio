@@ -12,7 +12,7 @@ export type PullRequest = {
 };
 
 // Status as of the date below; refresh with `gh search prs --author Aditya17-bot`.
-export const checked = "10 Oct 2026";
+export const checked = "13 Oct 2026";
 
 export const pullRequests: PullRequest[] = [
   {
@@ -74,6 +74,18 @@ export const pullRequests: PullRequest[] = [
     bug: "Integer images cast kernels and sigma to their own dtype: a uint8 Gaussian blur returned all zeros, box sums wrapped mod 256, and bilateral differences wrapped (10 − 250 = 16).",
     fix: "Following the maintainers' convention, integer and bool inputs are promoted to float32 before any kernel is cast, across nine filtering functions.",
     test: "Seven tests that documented the defect became convention tests against the same call on image.float(); they now run on MPS too.",
+  },
+  {
+    repo: "kornia/kornia",
+    repoBlurb: "Differentiable computer vision for PyTorch",
+    stars: "11k",
+    number: 5759,
+    title: "Reject integer kernel dtypes that cannot hold the taps",
+    state: "merged",
+    date: "Oct 2026",
+    bug: "The kernel builders accepted any integer dtype and built a wrong kernel without an error: an int32 box kernel was all zeros (1/3 truncated), a uint8 Gaussian wrapped the offsets −2 and −1 to 254 and 255, and a uint8 Laplacian came out as [1, 1, 252, 1, 1].",
+    fix: "Reject only a dtype that cannot hold the kernel's taps. Builders with fractional taps raise for every integer dtype, as OpenCV does; the Laplacians stay exact in a signed dtype wide enough for their range. spatial_gradient3d, which built its kernel in the input's dtype, now promotes integer volumes to float32.",
+    test: "The test that documented the defect became four convention tests, including the int8 boundaries: a size-129 Laplacian is exact, size 131 raises. Every public builder was checked against its float64 kernel for five integer dtypes and bool.",
   },
   {
     repo: "qdrant/fastembed",
