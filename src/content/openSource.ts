@@ -12,7 +12,7 @@ export type PullRequest = {
 };
 
 // Status as of the date below; refresh with `gh search prs --author Aditya17-bot`.
-export const checked = "13 Oct 2026";
+export const checked = "17 Oct 2026";
 
 export const pullRequests: PullRequest[] = [
   {
@@ -42,7 +42,7 @@ export const pullRequests: PullRequest[] = [
   {
     repo: "deepset-ai/haystack",
     repoBlurb: "LLM and RAG orchestration framework",
-    stars: "26k",
+    stars: "27k",
     number: 13143,
     title: "Write EvaluationRunResult CSV reports as UTF-8",
     state: "merged",
@@ -86,6 +86,30 @@ export const pullRequests: PullRequest[] = [
     bug: "The kernel builders accepted any integer dtype and built a wrong kernel without an error: an int32 box kernel was all zeros (1/3 truncated), a uint8 Gaussian wrapped the offsets −2 and −1 to 254 and 255, and a uint8 Laplacian came out as [1, 1, 252, 1, 1].",
     fix: "Reject only a dtype that cannot hold the kernel's taps. Builders with fractional taps raise for every integer dtype, as OpenCV does; the Laplacians stay exact in a signed dtype wide enough for their range. spatial_gradient3d, which built its kernel in the input's dtype, now promotes integer volumes to float32.",
     test: "The test that documented the defect became four convention tests, including the int8 boundaries: a size-129 Laplacian is exact, size 131 raises. Every public builder was checked against its float64 kernel for five integer dtypes and bool.",
+  },
+  {
+    repo: "deepset-ai/haystack",
+    repoBlurb: "LLM and RAG orchestration framework",
+    stars: "27k",
+    number: 13253,
+    title: "Keep line endings when FileSystemToolResultStore writes text",
+    state: "merged",
+    date: "Oct 2026",
+    bug: "The store that offloads large tool results to disk wrote text with write_text, which on Windows turns every \\n into \\r\\n. Reading the result back returned different text than was written, although the docstring promised an unchanged round trip; results that already used \\r\\n came back with \\r\\r\\n, and the character count in the pointer no longer matched the file.",
+    fix: "newline=\"\" so no newline translation happens and the file holds the UTF-8 bytes of the text exactly. The docstring now says line endings are kept.",
+    test: "LF and CRLF cases added to the round-trip test. Both fail on Windows without the fix and pass with it; the project's windows-latest CI leg guards it.",
+  },
+  {
+    repo: "unit8co/darts",
+    repoBlurb: "Time series forecasting in Python",
+    stars: "9.5k",
+    number: 3281,
+    title: "Keep stdout and stderr when overlapping threads suppress output",
+    state: "open",
+    date: "Oct 2026",
+    bug: "Prophet hides the console output of its fit by pointing file descriptors 1 and 2 at /dev/null. A second fit that started in another thread while the first was running saved /dev/null as the \"real\" output, restored it on exit, and silenced the whole process for good.",
+    fix: "One redirection shared by every use: a lock and a depth counter, so the first context to enter saves the real descriptors and the last one to exit restores them. A stream with no valid descriptor is left alone instead of raising.",
+    test: "The thread interleaving from the issue, made deterministic with events, plus a stream whose dup fails. Both fail before the fix.",
   },
   {
     repo: "qdrant/fastembed",

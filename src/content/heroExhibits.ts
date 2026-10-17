@@ -83,6 +83,7 @@ const LIBRARY: Record<string, string> = {
   "qdrant/fastembed": "fastembed",
   "dottxt-ai/outlines": "Outlines",
   "stanfordnlp/dspy": "DSPy",
+  "unit8co/darts": "Darts",
 };
 
 /** Beyond the output layer: the libraries the fixes shipped into, merged first. */

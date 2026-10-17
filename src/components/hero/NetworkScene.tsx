@@ -49,7 +49,7 @@ const INTRO_STOP = 1;
 // The libraries sit in a row past the output layer, raised and shifted so they read beside the copy.
 const LIB_Z = 9.4;
 const LIB_SPACING = 0.95;
-const LIB_X = -1.6;
+const LIB_X = -2.6;
 const LIB_Y = 0.9;
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
