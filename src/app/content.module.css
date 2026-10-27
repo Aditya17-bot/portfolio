@@ -172,6 +172,55 @@
   text-decoration-color: var(--activation);
 }
 
+.certificate {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) 1fr;
+  align-items: center;
+  gap: 14px 18px;
+  margin: 0;
+}
+
+.certificate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 4px);
+  transition: border-color 0.15s;
+}
+
+.certificate a:hover img,
+.certificate a:focus-visible img {
+  border-color: var(--activation);
+}
+
+.certificate figcaption {
+  display: grid;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.certificate figcaption span:first-child {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.certificate figcaption a {
+  color: var(--activation);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .certificate {
+    grid-template-columns: 1fr;
+  }
+}
+
 .badge {
   font-family: var(--font-mono);
   font-size: 11px;

@@ -17,6 +17,20 @@ test("research lists both papers, published patents with numbers and filed ones 
   await expect(filed.getByText("Application No.")).toHaveCount(0);
 });
 
+test("the presented paper shows its certificate and links the PDF", async ({ page, request }) => {
+  await page.goto("/research");
+  const cert = page.locator("[data-testid=paper][data-status=Presented] [data-testid=certificate]");
+  await expect(cert).toHaveCount(1);
+  const img = cert.locator("img");
+  await img.scrollIntoViewIfNeeded();
+  await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth)).toBeGreaterThan(0);
+  const href = await cert.locator("a").first().getAttribute("href");
+  const res = await request.get(href!);
+  expect(res.ok()).toBe(true);
+  expect(res.headers()["content-type"]).toContain("pdf");
+  await expect(page.locator("[data-testid=paper][data-status='Under revision'] [data-testid=certificate]")).toHaveCount(0);
+});
+
 test("open source separates merged from in-review and links each PR", async ({ page }) => {
   await page.goto("/open-source");
   const merged = pullRequests.filter((p) => p.state === "merged");

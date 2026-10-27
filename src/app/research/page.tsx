@@ -74,6 +74,29 @@ export default function Page() {
                     ))}
                   </dl>
                 ) : null}
+                {p.certificate ? (
+                  <figure className={styles.certificate} data-testid="certificate">
+                    <a href={p.certificate.pdf} target="_blank" rel="noopener">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- static preview, already sized */}
+                      <img
+                        src={p.certificate.image}
+                        width={p.certificate.width}
+                        height={p.certificate.height}
+                        alt={`${p.certificate.label}, ${p.venueShort}, issued to ${p.authors}`}
+                        loading="lazy"
+                      />
+                    </a>
+                    <figcaption>
+                      <span>{p.certificate.label}</span>
+                      <span>
+                        Issued to {p.authors} by the {p.venueShort} conference chairs.{" "}
+                        <a href={p.certificate.pdf} target="_blank" rel="noopener">
+                          Open the PDF
+                        </a>
+                      </span>
+                    </figcaption>
+                  </figure>
+                ) : null}
                 {p.explore ? (
                   <p className={styles.links}>
                     <Link href={p.explore.href}>{p.explore.label}</Link>

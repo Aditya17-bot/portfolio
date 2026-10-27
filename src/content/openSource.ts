@@ -12,7 +12,7 @@ export type PullRequest = {
 };
 
 // Status as of the date below; refresh with `gh search prs --author Aditya17-bot`.
-export const checked = "17 Oct 2026";
+export const checked = "27 Oct 2026";
 
 export const pullRequests: PullRequest[] = [
   {
@@ -153,7 +153,7 @@ export const pullRequests: PullRequest[] = [
     stars: "38k",
     number: 10589,
     title: "Build the subprocess PYTHONPATH with os.pathsep",
-    state: "open",
+    state: "merged",
     date: "Oct 2026",
     bug: "A test joined paths with \":\", which Windows reads as part of C:\\, so the child process could not find the test module.",
     fix: "os.pathsep.",

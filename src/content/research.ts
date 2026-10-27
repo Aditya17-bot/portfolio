@@ -9,6 +9,8 @@ export type Paper = {
   summary: string[];
   facts?: { label: string; value: string }[];
   explore?: { label: string; href: string };
+  /** Certificate issued by the venue: the PDF and a rendered preview of its first page. */
+  certificate?: { label: string; pdf: string; image: string; width: number; height: number };
 };
 
 export type Patent = {
@@ -28,7 +30,8 @@ export const papers: Paper[] = [
       "Solar-Aware Machine Learning Framework for Short-Term Electricity Demand Forecasting in Delhi Using Weather and Calendar Variables",
     authors: "Aditya Sridhar",
     role: "First author",
-    venue: "3rd International Conference on Signal Processing and Computer Vision (SIPCOV-2026), NIT Puducherry",
+    venue:
+      "3rd International Conference on Signal Processing and Computer Vision (SIPCOV-2026), NIT Puducherry and NIT Silchar, 8–9 Oct 2026",
     venueShort: "SIPCOV-2026",
     date: "Oct 2026",
     status: "Presented",
@@ -44,6 +47,13 @@ export const papers: Paper[] = [
       { label: "Best R²", value: "0.9977" },
     ],
     explore: { label: "Rerun on public data: try it", href: "/research/solar-forecasting" },
+    certificate: {
+      label: "Certificate of presentation",
+      pdf: "/research/sipcov-2026-certificate.pdf",
+      image: "/research/sipcov-2026-certificate.jpg",
+      width: 1287,
+      height: 858,
+    },
   },
   {
     title:
